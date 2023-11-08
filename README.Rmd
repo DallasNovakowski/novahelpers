@@ -133,7 +133,6 @@ You can use this inline function inline as well, `r report_tidy_anova_etaci(flip
 
 ## report_tidy_t()
 
-Works on t-tests
 
 ```{r}
 flipper_sex_ttest <- t.test(flipper_length_mm ~ sex, data=df) %>%
@@ -146,9 +145,15 @@ knitr::kable(flipper_sex_ttest)
 report_tidy_t(flipper_sex_ttest, teststat = T)
 ```
 
+Works on t-tests, `r report_tidy_t(flipper_sex_ttest, teststat = T)`
 
 
-... and it works on ANOVAs
+
+
+
+
+... and it works on emmmean contrasts from ANOVA, `r report_tidy_t(
+                           flipper_contrasts[flipper_contrasts$contrast =="Adelie female - Adelie male",])`
 
 ```{r}
 report_tidy_t(
@@ -160,7 +165,7 @@ report_tidy_t(
 
 # Putting it Together With a Plot
 
-```{r}
+```{r, warning=F, message = F}
 #Just for this plotting workflow
 
 library(cowplot)
