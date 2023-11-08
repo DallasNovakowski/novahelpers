@@ -1,0 +1,21 @@
+Package: novahelpers
+Title: Dallas's Helper Functions
+Version: 0.0.0.9000
+Authors@R: 
+    person("Dallas", "Novakowski", , "dallasnovakowski@gmail.com", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0003-3234-3115"))
+Description: Miscellanious functions, namely for summarizing and reporting data.
+License: GPL (>=2)
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
+Imports: 
+    weights, 
+    tidyverse, 
+    dplyr, 
+    stats,
+    effectsize,
+    magrittr,
+    emmeans
+URL: https://github.com/DallasNovakowski/novahelpers
+BugReports: https://github.com/DallasNovakowski/novahelpers/issues
