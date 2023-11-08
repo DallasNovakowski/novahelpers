@@ -5,7 +5,7 @@ Authors@R:
     person("Dallas", "Novakowski", , "dallasnovakowski@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0003-3234-3115"))
 Description: Miscellanious functions, namely for summarizing and reporting data.
-License: GPL (>=2)
+License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
@@ -19,3 +19,6 @@ Imports:
     emmeans
 URL: https://github.com/DallasNovakowski/novahelpers
 BugReports: https://github.com/DallasNovakowski/novahelpers/issues
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
