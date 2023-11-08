@@ -155,11 +155,7 @@ report_tidy_anova_etaci(flipper_anova, "sex")
 You can use this inline function inline as well, η<sup>2</sup> = 0.27,
 95% CI \[0.2, 0.35\], *F*(1, 327) = 122, *p* \< .001
 
-# Putting it Together With a Plot
-
 ## report_tidy_t()
-
-Works on t-tests
 
 ``` r
 flipper_sex_ttest <- t.test(flipper_length_mm ~ sex, data=df) %>%
@@ -182,7 +178,11 @@ report_tidy_t(flipper_sex_ttest, teststat = T)
 #> [1] "*d* = -0.53, 95% CI [-0.75, -0.31], *t* (325.28) = -4.81, *p* < .001"
 ```
 
-… and it works on ANOVAs
+Works on t-tests, *d* = -0.53, 95% CI \[-0.75, -0.31\], *t* (325.28) =
+-4.81, *p* \< .001
+
+… and it works on emmmean contrasts from ANOVA, *d* = -0.82, 95% CI
+\[-1.15, -0.48\], *p* \< .001
 
 ``` r
 report_tidy_t(
@@ -192,11 +192,12 @@ report_tidy_t(
 #> [1] "d = -0.82, p < .001"
 ```
 
+# Putting it Together With a Plot
+
 ``` r
 #Just for this plotting workflow
 
 library(cowplot)
-#> Warning: package 'cowplot' was built under R version 4.1.3
 #> 
 #> Attaching package: 'cowplot'
 #> The following object is masked from 'package:lubridate':
@@ -204,7 +205,6 @@ library(cowplot)
 #>     stamp
 library(ggdist)
 library(ggpubr) # significance brackets
-#> Warning: package 'ggpubr' was built under R version 4.1.3
 #> 
 #> Attaching package: 'ggpubr'
 #> The following object is masked from 'package:cowplot':
@@ -291,20 +291,6 @@ ggplot(data = df,
   cowplot::theme_half_open() +
   guides(fill_ramp = "none")  +
   theme(plot.subtitle = ggtext::element_markdown())
-#> Warning in text_info(label, fontkey, fontfamily, font, fontsize, cache): unable
-#> to translate '<U+03B7>png112' to native encoding
-#> Warning in text_info_cache[[key]] <- info: unable to translate '<U+03B7>png112'
-#> to native encoding
-#> Warning in text_info(label, fontkey, fontfamily, font, fontsize, cache): unable
-#> to translate '<U+03B7>png112' to native encoding
-
-#> Warning in text_info(label, fontkey, fontfamily, font, fontsize, cache): unable
-#> to translate '<U+03B7>png112' to native encoding
-#> Warning in do.call(gList, grobs): unable to translate '**species**: <U+03B7>^2^
-#> = 0.83, 95% CI [0.8, 0.85], *F*(2, 327) = 783, *p* < .001<br>**sex**:
-#> <U+03B7>^2^ = 0.27, 95% CI [0.2, 0.35], *F*(1, 327) = 122, *p* <
-#> .001<br>**species*sex**: <U+03B7>^2^ = 0.03, 95% CI [0, 0.07], *F*(2, 327) = 5,
-#> *p* = .01' to native encoding
 ```
 
 <img src="man/figures/README-unnamed-chunk-10-1.png" width="100%" />

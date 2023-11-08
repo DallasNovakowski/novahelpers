@@ -130,8 +130,6 @@ report_tidy_anova_etaci(flipper_anova, "sex")
 
 You can use this inline function inline as well, `r report_tidy_anova_etaci(flipper_anova, "sex")`
 
-# Putting it Together With a Plot
-
 
 ## report_tidy_t()
 
@@ -160,7 +158,7 @@ report_tidy_t(
 ```
 
 
-
+# Putting it Together With a Plot
 
 ```{r}
 #Just for this plotting workflow
