@@ -4,12 +4,12 @@
 \alias{merge_emmeans_summary}
 \title{This function takes summary data and a tidy emmeans object and adds emmeans-related columns to the summary data}
 \usage{
-merge_emmeans_summary(summary_data, emmeans_tidy)
+merge_emmeans_summary(summary_data, emmean_obj)
 }
 \arguments{
 \item{summary_data}{The  dataframe output of make_summary}
 
-\item{emmeans_tidy}{The tidy dataframe}
+\item{emmean_obj}{The tidy dataframe}
 }
 \value{
 A dataframe with summary statistics

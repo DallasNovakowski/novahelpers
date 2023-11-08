@@ -1,14 +1,16 @@
 #' This function takes summary data and a tidy emmeans object and adds emmeans-related columns to the summary data
 
 #' @param summary_data The  dataframe output of make_summary
-#' @param emmeans_tidy The tidy dataframe
+#' @param emmean_obj The tidy dataframe
 #' @return A dataframe with summary statistics
 #' @export
 
 
-merge_emmeans_summary <- function(summary_data, emmeans_tidy) {
+merge_emmeans_summary <- function(summary_data, emmean_obj) {
   # Add emmeans-related columns to the summary_data
 
+  emmeans_tidy <- data.frame(emmean_obj$emmeans)
+  
   # Assign the 'emmean' values from the emmeans_tidy to a new column 'emmean' in summary_data
   summary_data$emmean <- emmeans_tidy$emmean
 
