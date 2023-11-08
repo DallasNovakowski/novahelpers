@@ -1,0 +1,254 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# novahelpers
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+Dallas's miscellanious helper functions, namely for summarizing and reporting data.
+
+## Installation
+
+You can install the development version of novahelpers from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("DallasNovakowski/novahelpers")
+```
+
+## Usage
+
+
+```{r example, warning=F, message = F}
+library(tidyverse)
+library(emmeans)
+library(palmerpenguins) # dataset
+
+library(novahelpers)
+```
+
+Load data
+
+```{r}
+df <- palmerpenguins::penguins
+
+# drop rows with missing values
+df <- df[complete.cases(df)==TRUE, ]
+```
+
+
+## make_summary()
+
+Summarizes our relevant descriptive stats
+
+```{r cars}
+flipper_summary <- make_summary(data = df, dv = flipper_length_mm, grouping1 = species, grouping2 = sex)
+
+knitr::kable(flipper_summary)
+```
+
+Running ANOVA, nothing i take credit for.
+
+```{r}
+# basic fit
+# Setting contrasts
+contrasts(df$species) <- contr.sum
+
+contrasts(df$sex) <- contr.sum
+
+# Type 3 anova with orthogonal contrasts
+flipper_fit <- lm(flipper_length_mm ~ species*sex, data = df)
+
+flipper_anova <- car::Anova(flipper_fit, type = 3)
+
+flipper_emmeans <- emmeans::emmeans(flipper_fit, specs = pairwise ~ species*sex)
+```
+
+
+## merge_emmeans_summary()
+
+Combines our `make_summary()` output with `emmeans` object
+
+```{r}
+flipper_summary <- merge_emmeans_summary(flipper_summary, flipper_emmeans)
+knitr::kable(flipper_summary)
+```
+
+## calculate_and_merge_effect_sizes()
+
+Merges raw comparisons and statistical tests with cohen's d effect sizes. Currently only does all tukey-adjusted comparisons
+
+```{r}
+flipper_contrasts  <- calculate_and_merge_effect_sizes(flipper_emmeans, flipper_fit)
+
+knitr::kable(flipper_contrasts)
+```
+
+
+```{r}
+# Extract effect size (partial eta squared) from anova
+flipper_anova_pes <- effectsize::eta_squared(flipper_anova,
+                                             alternative="two.sided",
+                                             verbose = FALSE)
+# Convert anova table into dataframe
+flipper_anova <- data.frame(flipper_anova)
+
+
+flipper_anova <- flipper_anova[!(rownames(flipper_anova) == "(Intercept)"), ]
+
+# import effect size estimates and confidence intervals to anova dataframe
+flipper_anova[1:3,"pes_ci95_lo"] <- flipper_anova_pes$CI_low
+flipper_anova[1:3,"pes_ci95_hi"] <- flipper_anova_pes$CI_high
+flipper_anova[1:3,"pes"] <- flipper_anova_pes$Eta2
+
+# round all numeric columns to 2 decimal places
+flipper_anova <- flipper_anova %>%
+  dplyr::mutate_if(is.numeric, function(x) round(x, 2))
+```
+
+
+## report_tidy_anova_etaci()
+
+Used for extracting results from anova table into reportable text
+
+```{r}
+report_tidy_anova_etaci(flipper_anova, "sex")
+```
+
+You can use this inline function inline as well, `r report_tidy_anova_etaci(flipper_anova, "sex")`
+
+# Putting it Together With a Plot
+
+
+## report_tidy_t()
+
+Works on t-tests
+
+```{r}
+flipper_sex_ttest <- t.test(flipper_length_mm ~ sex, data=df) %>%
+  report::report() %>%
+  data.frame() %>%
+  janitor::clean_names()
+
+knitr::kable(flipper_sex_ttest)
+
+report_tidy_t(flipper_sex_ttest, teststat = T)
+```
+
+
+
+... and it works on ANOVAs
+
+```{r}
+report_tidy_t(
+                           flipper_contrasts[flipper_contrasts$contrast =="Adelie female - Adelie male",], 
+                           italicize = FALSE, 
+                           ci = FALSE)
+```
+
+
+
+
+```{r}
+#Just for this plotting workflow
+
+library(cowplot)
+library(ggdist)
+library(ggpubr) # significance brackets
+
+# Define color palette
+nova_palette <- c("#78AAA9", "#FFDB6E")
+
+ggplot(data = df,
+                       aes(y = flipper_length_mm, # our dependent/response/outcome variable 
+                           x = species,  # our grouping/independent/predictor variable
+                           fill = sex)) +  # our third grouping/independent/interaction variable
+  ggdist::stat_slab(side = "both",  
+                    aes(fill_ramp = after_stat(level)),
+                    .width = c(.50, 1),
+                    position = position_dodge(width = .7)) +
+    scale_colour_manual(values = nova_palette, 
+                              aesthetics = c("fill")) +   
+  ## define amount of fading
+  ggdist::scale_fill_ramp_discrete(range = c(0.25, 1),
+                           aesthetics = c("fill_ramp")) + 
+       labs(subtitle = paste0("**species**: ", report_tidy_anova_etaci(flipper_anova,"species"), "<br>",
+                           "**sex**: ", report_tidy_anova_etaci(flipper_anova,"sex"), "<br>",
+                           "**species*sex**: ",report_tidy_anova_etaci(flipper_anova,"species:sex"))
+         ) +
+  
+  ggpubr::geom_bracket(inherit.aes = FALSE, # necessary for factorial design
+                       tip.length = 0.02, 
+                       vjust = 0,
+                       xmin = 1.175, # You need to play with these by hand
+                       xmax = 1.825, 
+                       y.position = 210 ,
+                       label.size = 2.1,
+                       label = paste0(
+                         report_tidy_t(
+                           flipper_contrasts[flipper_contrasts$contrast =="Chinstrap female - Adelie male",], 
+                           italicize = FALSE, 
+                           ci = FALSE)) # content of your bracket text
+                       
+                       
+  ) +
+  ggpubr::geom_bracket(inherit.aes = FALSE, 
+                       tip.length = 0.02, 
+                       vjust = 0,
+                       xmin = .825, 
+                       xmax = 1.175, 
+                       y.position = 217 ,
+                       label.size = 2.1,
+                       label = paste0(
+                         report_tidy_t(
+                           flipper_contrasts[flipper_contrasts$contrast =="Adelie female - Adelie male",], 
+                           italicize = FALSE, 
+                           ci = FALSE)) # content of your bracket text
+  ) +
+  ggpubr::geom_bracket(inherit.aes = FALSE, 
+                       tip.length = 0.02, 
+                       vjust = 0,
+                       xmin = .825, 
+                       xmax = 2.175, 
+                       y.position = 225 ,
+                       label.size = 2.1,
+                       
+                       label = paste0(
+                         report_tidy_t(
+                           flipper_contrasts[flipper_contrasts$contrast =="Adelie female - Chinstrap male",], 
+                           italicize = FALSE, 
+                           ci = FALSE)) # content of your bracket text
+  ) +
+  ggpubr::geom_bracket(inherit.aes = FALSE, 
+                       tip.length = -0.02, 
+                       vjust = 0.6,
+                       xmin = 2.175, 
+                       xmax = 3.175, 
+                       y.position = 185 ,
+                       label.size = 2.1,
+                       label = paste0(
+                         report_tidy_t(
+                           flipper_contrasts[flipper_contrasts$contrast =="Chinstrap male - Gentoo male",], 
+                           italicize = FALSE, 
+                           ci = FALSE)) # content of your bracket text
+  ) +
+
+  cowplot::theme_half_open() +
+  guides(fill_ramp = "none")  +
+  theme(plot.subtitle = ggtext::element_markdown())
+```
+
+
