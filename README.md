@@ -308,10 +308,10 @@ ggplot(data = df,
 
   geom_text(data = flipper_summary, 
             aes(x = species, 
-                y = y50-std_dev, 
+                y = y25 - .2*std_dev, 
                 label = round(mean,1)),
             color="black", 
-            size = 2, 
+            size = 2.5, 
 
             position = position_dodge2nudge(x= -.05, width = .6)) +
     geom_pointrange(data = flipper_summary, # our externally-defined summary dataframe
