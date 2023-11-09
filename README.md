@@ -92,6 +92,22 @@ knitr::kable(flipper_summary)
 | Gentoo    | female | 212.7069 | 203 | 222 |  58 | 3.897857 | 0.5118136 | 210.00 | 212.0 | 215.00 | 211.7037 | 213.7101 | 199.9118 | 0.9698693 |    198.0038 |    201.8197 |
 | Gentoo    | male   | 221.5410 | 208 | 231 |  61 | 5.673252 | 0.7263855 | 218.00 | 221.0 | 225.00 | 220.1173 | 222.9647 | 221.5410 | 0.7240820 |    220.1165 |    222.9654 |
 
+## planned comparisons
+
+See <https://aosmith.rbind.io/2019/04/15/custom-contrasts-emmeans/>
+
+``` r
+flipper_just_emmeans <- emmeans::emmeans(flipper_fit, specs = ~ species*sex)
+
+# correponds to row numbers in  flipper_just_emmeans
+chinstrap_female = c(0, 1, 0, 0, 0, 0)
+adelie_female = c(1, 0, 0, 0, 0, 0)
+
+contrast(flipper_just_emmeans, method = list("Adelie female - Chinstrap female" =  adelie_female-chinstrap_female) )
+#>  contrast                         estimate   SE  df t.ratio p.value
+#>  Adelie female - Chinstrap female    -3.94 1.17 327  -3.356  0.0009
+```
+
 ## calculate_and_merge_effect_sizes()
 
 Merges raw comparisons and statistical tests with cohen’s d effect
@@ -285,7 +301,7 @@ ggdist::scale_fill_ramp_discrete(range = c(0.0, 1),
   guides(fill_ramp = "none")
 ```
 
-<img src="man/figures/README-unnamed-chunk-10-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-11-1.png" width="100%" />
 
 For posterity, here is a plot with just faded density slabs
 
@@ -325,4 +341,4 @@ ggplot(data = df,
   theme_basic()
 ```
 
-<img src="man/figures/README-unnamed-chunk-11-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-12-1.png" width="100%" />

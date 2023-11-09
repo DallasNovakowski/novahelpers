@@ -87,6 +87,21 @@ flipper_summary <- merge_emmeans_summary(flipper_summary, flipper_emmeans)
 knitr::kable(flipper_summary)
 ```
 
+## planned comparisons
+
+See https://aosmith.rbind.io/2019/04/15/custom-contrasts-emmeans/
+
+```{r}
+flipper_just_emmeans <- emmeans::emmeans(flipper_fit, specs = ~ species*sex)
+
+# correponds to row numbers in  flipper_just_emmeans
+chinstrap_female = c(0, 1, 0, 0, 0, 0)
+adelie_female = c(1, 0, 0, 0, 0, 0)
+
+contrast(flipper_just_emmeans, method = list("Adelie female - Chinstrap female" =  adelie_female-chinstrap_female) )
+```
+
+
 ## calculate_and_merge_effect_sizes()
 
 Merges raw comparisons and statistical tests with cohen's d effect sizes. Currently only does all tukey-adjusted comparisons
