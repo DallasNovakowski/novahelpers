@@ -16,7 +16,10 @@ Imports:
     stats,
     effectsize,
     magrittr,
-    emmeans
+    emmeans,
+    cowplot,
+    ggtext,
+    ggplot2
 URL: https://github.com/DallasNovakowski/novahelpers
 BugReports: https://github.com/DallasNovakowski/novahelpers/issues
 Suggests: 
