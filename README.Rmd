@@ -291,7 +291,7 @@ ggplot(data = df,
                       ymax = upci # upper-bound confidence interval
                   ), 
                   show.legend = F,
-                  position = position_dodge2nudge(x= -.03, width = .6)) + 
+                  position = position_dodge2nudge(x= -.05, width = .6)) + 
   theme_basic()
 ```
 
