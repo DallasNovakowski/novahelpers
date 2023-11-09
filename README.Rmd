@@ -180,33 +180,55 @@ ggplot(data = df,
        aes(y = flipper_length_mm, # our dependent/response/outcome variable 
            x = species,  # our grouping/independent/predictor variable
            fill = sex)) +  # our third grouping/independent/interaction variable
-  ggdist::stat_slab(side = "right",  
-                    aes(fill_ramp = after_stat(level)),
-                    .width = c(.50, 1),
-                    position = position_dodge(width = .7)) +
-    scale_colour_manual(values = nova_palette, 
-                              aesthetics = c("fill")) +   
-  ## define amount of fading
-  ggdist::scale_fill_ramp_discrete(range = c(0.25, 1),
-                           aesthetics = c("fill_ramp")) + 
-       labs(subtitle = paste0("**species**: ", report_tidy_anova_etaci(flipper_anova,"species"), "<br>",
-                           "**sex**: ", report_tidy_anova_etaci(flipper_anova,"sex"), "<br>",
-                           "**species*sex**: ",report_tidy_anova_etaci(flipper_anova,"species:sex"))
-         ) + # add a density slab
-  geom_pointrange(data = flipper_summary, # our externally-defined summary dataframe
+    ggdist::stat_slab( alpha = .3,
+                     adjust = 2,
+                     side = "left", 
+                     scale = 0.4, 
+                     show.legend = F, 
+                     position = position_dodge(width = .6), 
+                     .width = c(.50, 1),
+                     aes(fill_ramp = after_stat(level))) +
+  ## Add stacked dots
+  ggdist::stat_dots(alpha = 0.5,
+                    side = "left", 
+                    scale = 0.4, 
+                    aes(color = sex,
+                    fill = sex),
+
+                    position = position_dodge(width = .6)) + 
+  geom_text(data = flipper_summary, 
+            aes(x = species, 
+                y = mean, 
+                label = round(mean,1)),
+            color="black", 
+            size = 2, 
+            position = position_dodge2nudge(x = .08, width = .6)) +
+    geom_pointrange(data = flipper_summary, # our externally-defined summary dataframe
                   aes(x = species,  # our independent variable
                       y = mean, # our outcome/dependent variable
                       ymin = loci,  # lower-bound confidence interval
                       ymax = upci # upper-bound confidence interval
                   ), 
                   show.legend = F,
-                  position = position_dodge2nudge(x=.1,width = .7)) +
+                  position = position_dodge2nudge(x= -.03, width = .6)) +
+  
+  
+    scale_colour_manual(values = nova_palette, 
+                              aesthetics = c("fill", "color")) +   
+  ## define amount of fading
+ggdist::scale_fill_ramp_discrete(range = c(0.0, 1),
+                                   aesthetics = c("fill_ramp")) + 
+       labs(subtitle = paste0("**species**: ", report_tidy_anova_etaci(flipper_anova,"species"), "<br>",
+                           "**sex**: ", report_tidy_anova_etaci(flipper_anova,"sex"), "<br>",
+                           "**species*sex**: ",report_tidy_anova_etaci(flipper_anova,"species:sex"))
+         ) + # add a density slab
+
   
   ggpubr::geom_bracket(inherit.aes = FALSE, # necessary for factorial design
                        tip.length = 0.02, 
                        vjust = -0.6,
-                       xmin = 1.175, # You need to play with these by hand
-                       xmax = 1.825, 
+                       xmin = 1.12, # You need to play with these by hand
+                       xmax = 1.82, 
                        y.position = 210 ,
                        label.size = 2.1,
                        label = paste0(
@@ -215,41 +237,13 @@ ggplot(data = df,
                            italicize = FALSE, 
                            ci = FALSE)) # content of your bracket text
                        
-                       
-  ) +
-  ggpubr::geom_bracket(inherit.aes = FALSE, 
-                       tip.length = 0.02, 
-                       vjust = -0.6,
-                       xmin = .825, 
-                       xmax = 1.175, 
-                       y.position = 217 ,
-                       label.size = 2.1,
-                       label = paste0(
-                         report_tidy_t(
-                           flipper_contrasts[flipper_contrasts$contrast =="Adelie female - Adelie male",], 
-                           italicize = FALSE, 
-                           ci = FALSE)) # content of your bracket text
-  ) +
-  ggpubr::geom_bracket(inherit.aes = FALSE, 
-                       tip.length = 0.02, 
-                       vjust = -0.6,
-                       xmin = .825, 
-                       xmax = 2.175, 
-                       y.position = 225 ,
-                       label.size = 2.1,
-                       
-                       label = paste0(
-                         report_tidy_t(
-                           flipper_contrasts[flipper_contrasts$contrast =="Adelie female - Chinstrap male",], 
-                           italicize = FALSE, 
-                           ci = FALSE)) # content of your bracket text
   ) +
   ggpubr::geom_bracket(inherit.aes = FALSE, 
                        tip.length = -0.02, 
                        vjust = -0.6,
-                       xmin = 2.175, 
-                       xmax = 3.175, 
-                       y.position = 185 ,
+                       xmin = 2.12, 
+                       xmax = 3.12, 
+                       y.position = 192 ,
                        label.size = 2.1,
                        label = paste0(
                          report_tidy_t(
@@ -260,8 +254,7 @@ ggplot(data = df,
 
   cowplot::theme_half_open() +
   guides(fill_ramp = "none")  +
-  theme(plot.subtitle = ggtext::element_markdown()) + 
-  coord_flip() 
+  theme(plot.subtitle = ggtext::element_markdown())
 ```
 
 
