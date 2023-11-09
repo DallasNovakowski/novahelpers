@@ -290,7 +290,6 @@ ggdist::scale_fill_ramp_discrete(range = c(0.0, 1),
 For posterity, here is a plot with just faded density slabs
 
 ``` r
-
 ggplot(data = df,
        aes(y = flipper_length_mm, # our dependent/response/outcome variable 
            x = species,  # our grouping/independent/predictor variable
@@ -309,11 +308,12 @@ ggplot(data = df,
 
   geom_text(data = flipper_summary, 
             aes(x = species, 
-                y = mean, 
+                y = y50-std_dev, 
                 label = round(mean,1)),
             color="black", 
             size = 2, 
-            position = position_dodge2nudge(x = .08, width = .6)) +
+
+            position = position_dodge2nudge(x= -.05, width = .6)) +
     geom_pointrange(data = flipper_summary, # our externally-defined summary dataframe
                   aes(x = species,  # our independent variable
                       y = mean, # our outcome/dependent variable
