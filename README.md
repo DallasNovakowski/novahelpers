@@ -192,7 +192,7 @@ report_tidy_t(
 #> [1] "d = -0.82, p < .001"
 ```
 
-# Putting it Together With a Plot
+# Putting it Together With a Plot, with theme_basic()
 
 ``` r
 #Just for this plotting workflow
@@ -200,7 +200,7 @@ library(ggpp) # for position_dodge2nudge
 library(cowplot)
 library(ggdist)
 library(ggpubr) # significance brackets
-
+library(ggtext)
 
 # Define color palette
 nova_palette <- c("#78AAA9", "#FFDB6E")
@@ -281,9 +281,8 @@ ggdist::scale_fill_ramp_discrete(range = c(0.0, 1),
                            ci = FALSE)) # content of your bracket text
   ) +
 
-  cowplot::theme_half_open() +
-  guides(fill_ramp = "none")  +
-  theme(plot.subtitle = ggtext::element_markdown())
+  theme_basic() +
+  guides(fill_ramp = "none")
 ```
 
 <img src="man/figures/README-unnamed-chunk-10-1.png" width="100%" />
