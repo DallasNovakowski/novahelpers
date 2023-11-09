@@ -196,29 +196,20 @@ report_tidy_t(
 
 ``` r
 #Just for this plotting workflow
-
+library(ggpp) # for position_dodge2nudge
 library(cowplot)
-#> 
-#> Attaching package: 'cowplot'
-#> The following object is masked from 'package:lubridate':
-#> 
-#>     stamp
 library(ggdist)
 library(ggpubr) # significance brackets
-#> 
-#> Attaching package: 'ggpubr'
-#> The following object is masked from 'package:cowplot':
-#> 
-#>     get_legend
+
 
 # Define color palette
 nova_palette <- c("#78AAA9", "#FFDB6E")
 
 ggplot(data = df,
-                       aes(y = flipper_length_mm, # our dependent/response/outcome variable 
-                           x = species,  # our grouping/independent/predictor variable
-                           fill = sex)) +  # our third grouping/independent/interaction variable
-  ggdist::stat_slab(side = "both",  
+       aes(y = flipper_length_mm, # our dependent/response/outcome variable 
+           x = species,  # our grouping/independent/predictor variable
+           fill = sex)) +  # our third grouping/independent/interaction variable
+  ggdist::stat_slab(side = "right",  
                     aes(fill_ramp = after_stat(level)),
                     .width = c(.50, 1),
                     position = position_dodge(width = .7)) +
@@ -230,11 +221,19 @@ ggplot(data = df,
        labs(subtitle = paste0("**species**: ", report_tidy_anova_etaci(flipper_anova,"species"), "<br>",
                            "**sex**: ", report_tidy_anova_etaci(flipper_anova,"sex"), "<br>",
                            "**species*sex**: ",report_tidy_anova_etaci(flipper_anova,"species:sex"))
-         ) +
+         ) + # add a density slab
+  geom_pointrange(data = flipper_summary, # our externally-defined summary dataframe
+                  aes(x = species,  # our independent variable
+                      y = mean, # our outcome/dependent variable
+                      ymin = loci,  # lower-bound confidence interval
+                      ymax = upci # upper-bound confidence interval
+                  ), 
+                  show.legend = F,
+                  position = position_dodge2nudge(x=.1,width = .7)) +
   
   ggpubr::geom_bracket(inherit.aes = FALSE, # necessary for factorial design
                        tip.length = 0.02, 
-                       vjust = 0,
+                       vjust = -0.6,
                        xmin = 1.175, # You need to play with these by hand
                        xmax = 1.825, 
                        y.position = 210 ,
@@ -249,7 +248,7 @@ ggplot(data = df,
   ) +
   ggpubr::geom_bracket(inherit.aes = FALSE, 
                        tip.length = 0.02, 
-                       vjust = 0,
+                       vjust = -0.6,
                        xmin = .825, 
                        xmax = 1.175, 
                        y.position = 217 ,
@@ -262,7 +261,7 @@ ggplot(data = df,
   ) +
   ggpubr::geom_bracket(inherit.aes = FALSE, 
                        tip.length = 0.02, 
-                       vjust = 0,
+                       vjust = -0.6,
                        xmin = .825, 
                        xmax = 2.175, 
                        y.position = 225 ,
@@ -276,7 +275,7 @@ ggplot(data = df,
   ) +
   ggpubr::geom_bracket(inherit.aes = FALSE, 
                        tip.length = -0.02, 
-                       vjust = 0.6,
+                       vjust = -0.6,
                        xmin = 2.175, 
                        xmax = 3.175, 
                        y.position = 185 ,
@@ -290,7 +289,8 @@ ggplot(data = df,
 
   cowplot::theme_half_open() +
   guides(fill_ramp = "none")  +
-  theme(plot.subtitle = ggtext::element_markdown())
+  theme(plot.subtitle = ggtext::element_markdown()) + 
+  coord_flip() 
 ```
 
-<img src="man/figures/README-message-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-10-1.png" width="100%" />
