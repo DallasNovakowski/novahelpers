@@ -218,7 +218,7 @@ ggplot(data = df,
                      .width = c(.50, 1),
                      aes(fill_ramp = after_stat(level))) +
   ## Add stacked dots
-  ggdist::stat_dots(alpha = 0.5,
+  ggdist::stat_dots(alpha = 0.7,
                     side = "left", 
                     scale = 0.4, 
                     aes(color = sex,
@@ -269,7 +269,7 @@ ggdist::scale_fill_ramp_discrete(range = c(0.0, 1),
   ) +
   ggpubr::geom_bracket(inherit.aes = FALSE, 
                        tip.length = -0.02, 
-                       vjust = -0.6,
+                       vjust = 0.3,
                        xmin = 2.12, 
                        xmax = 3.12, 
                        y.position = 192 ,
