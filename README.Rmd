@@ -89,7 +89,7 @@ knitr::kable(flipper_summary)
 
 ## planned comparisons
 
-See https://aosmith.rbind.io/2019/04/15/custom-contrasts-emmeans/
+See <https://aosmith.rbind.io/2019/04/15/custom-contrasts-emmeans/> and <https://cran.r-project.org/web/packages/emmeans/vignettes/comparisons.html#linfcns> 
 
 ```{r}
 flipper_just_emmeans <- emmeans::emmeans(flipper_fit, specs = ~ species*sex)
