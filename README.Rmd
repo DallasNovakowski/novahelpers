@@ -277,7 +277,7 @@ ggplot(data = df,
 
   geom_text(data = flipper_summary, 
             aes(x = species, 
-                y = y25 - .2*std_dev, 
+                y = y25 - .1*sd(df$flipper_length_mm), 
                 label = round(mean,1)),
             color="black", 
             size = 2.5, 
