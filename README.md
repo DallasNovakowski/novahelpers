@@ -317,7 +317,7 @@ ggplot(data = df,
            fill = sex)) +  # our third grouping/independent/interaction variable
     ggdist::stat_slab(
                      side = "left", 
-                     scale = 0.6, 
+                     scale = 0.5, 
                      position = position_dodge(width = .6), 
                      .width = c(.50, 1),
                      aes(fill_ramp = after_stat(level))) +
