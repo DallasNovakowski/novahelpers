@@ -16,6 +16,7 @@ make_summary <- function(data, group_vars, summarization_var) {
   data %>%
     group_by(!!!syms(group_vars)) %>%
     dplyr::summarise(
+      missing_count = sum(is.na(!!sym(summarization_var))),
       n = n(),                         # Count the number of observations
       mean = mean(!!sym(summarization_var)),             # Calculate the mean of the dependent variable
       std_dev = sd(!!sym(summarization_var)),           # Calculate the standard deviation

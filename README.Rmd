@@ -16,6 +16,7 @@ knitr::opts_chunk$set(
 # novahelpers
 
 <!-- badges: start -->
+
 <!-- badges: end -->
 
 Dallas's miscellanious helper functions, namely for summarizing and reporting data.
@@ -30,7 +31,6 @@ devtools::install_github("DallasNovakowski/novahelpers")
 ```
 
 ## Usage
-
 
 ```{r example, warning=F, message = F}
 library(tidyverse)
@@ -48,7 +48,6 @@ df <- palmerpenguins::penguins
 # drop rows with missing values
 df <- df[complete.cases(df)==TRUE, ]
 ```
-
 
 ## make_summary()
 
@@ -71,7 +70,6 @@ my_summaries <- make_many_summaries(data = df,
 my_summaries
 ```
 
-
 Running ANOVA, nothing i take credit for.
 
 ```{r}
@@ -89,7 +87,6 @@ flipper_anova <- car::Anova(flipper_fit, type = 3)
 flipper_emmeans <- emmeans::emmeans(flipper_fit, specs = pairwise ~ species*sex)
 ```
 
-
 ## merge_emmeans_summary()
 
 Combines our `make_summary()` output with `emmeans` object
@@ -99,9 +96,9 @@ flipper_summary <- merge_emmeans_summary(flipper_summary, flipper_emmeans)
 knitr::kable(flipper_summary)
 ```
 
-## planned comparisons
+## Planned Comparisons
 
-See <https://aosmith.rbind.io/2019/04/15/custom-contrasts-emmeans/> and <https://cran.r-project.org/web/packages/emmeans/vignettes/comparisons.html#linfcns> 
+See <https://aosmith.rbind.io/2019/04/15/custom-contrasts-emmeans/> and <https://cran.r-project.org/web/packages/emmeans/vignettes/comparisons.html#linfcns> for custom contrasts
 
 ```{r}
 flipper_just_emmeans <- emmeans::emmeans(flipper_fit, specs = ~ species*sex)
@@ -113,7 +110,6 @@ adelie_female = c(1, 0, 0, 0, 0, 0)
 contrast(flipper_just_emmeans, method = list("Adelie female - Chinstrap female" =  adelie_female-chinstrap_female) )
 ```
 
-
 ## calculate_and_merge_effect_sizes()
 
 Merges raw comparisons and statistical tests with cohen's d effect sizes. Currently only does all tukey-adjusted comparisons
@@ -123,7 +119,6 @@ flipper_contrasts  <- calculate_and_merge_effect_sizes(flipper_emmeans, flipper_
 
 knitr::kable(flipper_contrasts)
 ```
-
 
 ```{r}
 # Extract effect size (partial eta squared) from anova
@@ -146,7 +141,6 @@ flipper_anova <- flipper_anova %>%
   dplyr::mutate_if(is.numeric, function(x) round(x, 2))
 ```
 
-
 ## report_tidy_anova_etaci()
 
 Used for extracting results from anova table into reportable text
@@ -157,9 +151,7 @@ report_tidy_anova_etaci(flipper_anova, "sex")
 
 You can use this inline function inline as well, `r report_tidy_anova_etaci(flipper_anova, "sex")`
 
-
 ## report_tidy_t()
-
 
 ```{r}
 flipper_sex_ttest <- t.test(flipper_length_mm ~ sex, data=df) %>%
@@ -174,13 +166,7 @@ report_tidy_t(flipper_sex_ttest, teststat = T)
 
 Works on t-tests, `r report_tidy_t(flipper_sex_ttest, teststat = T)`
 
-
-
-
-
-
-... and it works on emmmean contrasts from ANOVA, `r report_tidy_t(
-                           flipper_contrasts[flipper_contrasts$contrast =="Adelie female - Adelie male",])`
+... and it works on emmmean contrasts from ANOVA, `r report_tidy_t(                            flipper_contrasts[flipper_contrasts$contrast =="Adelie female - Adelie male",])`
 
 ```{r}
 report_tidy_t(
@@ -188,7 +174,6 @@ report_tidy_t(
                            italicize = FALSE, 
                            ci = FALSE)
 ```
-
 
 # Putting it Together With a Plot, with theme_basic()
 
@@ -320,5 +305,3 @@ ggplot(data = df,
                   position = position_dodge2nudge(x= -.05, width = .6)) + 
   theme_basic()
 ```
-
-
