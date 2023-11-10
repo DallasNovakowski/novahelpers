@@ -43,19 +43,69 @@ df <- df[complete.cases(df)==TRUE, ]
 Summarizes our relevant descriptive stats
 
 ``` r
-flipper_summary <- make_summary(data = df, dv = flipper_length_mm, grouping1 = species, grouping2 = sex)
+flipper_summary <- make_summary(df, c("sex", "species"), "flipper_length_mm")
 
 knitr::kable(flipper_summary)
 ```
 
-| species   | sex    |     mean | min | max |   n |  std_dev |        se |    y25 |   y50 |    y75 |     loci |     upci |
-|:----------|:-------|---------:|----:|----:|----:|---------:|----------:|-------:|------:|-------:|---------:|---------:|
-| Adelie    | female | 187.7945 | 172 | 202 |  73 | 5.595035 | 0.6548493 | 185.00 | 188.0 | 191.00 | 186.5110 | 189.0780 |
-| Adelie    | male   | 192.4110 | 178 | 210 |  73 | 6.599317 | 0.7723917 | 189.00 | 193.0 | 197.00 | 190.8971 | 193.9248 |
-| Chinstrap | female | 191.7353 | 178 | 202 |  34 | 5.754096 | 0.9868194 | 187.25 | 192.0 | 195.75 | 189.8011 | 193.6695 |
-| Chinstrap | male   | 199.9118 | 187 | 212 |  34 | 5.976559 | 1.0249713 | 196.00 | 200.5 | 203.00 | 197.9028 | 201.9207 |
-| Gentoo    | female | 212.7069 | 203 | 222 |  58 | 3.897857 | 0.5118136 | 210.00 | 212.0 | 215.00 | 211.7037 | 213.7101 |
-| Gentoo    | male   | 221.5410 | 208 | 231 |  61 | 5.673252 | 0.7263855 | 218.00 | 221.0 | 225.00 | 220.1173 | 222.9647 |
+| sex    | species   |     mean | min | max |   n |  std_dev |        se |    y25 |   y50 |    y75 |     loci |     upci |
+|:-------|:----------|---------:|----:|----:|----:|---------:|----------:|-------:|------:|-------:|---------:|---------:|
+| female | Adelie    | 187.7945 | 172 | 202 |  73 | 5.595035 | 0.6548493 | 185.00 | 188.0 | 191.00 | 186.5110 | 189.0780 |
+| female | Chinstrap | 191.7353 | 178 | 202 |  34 | 5.754096 | 0.9868194 | 187.25 | 192.0 | 195.75 | 189.8011 | 193.6695 |
+| female | Gentoo    | 212.7069 | 203 | 222 |  58 | 3.897857 | 0.5118136 | 210.00 | 212.0 | 215.00 | 211.7037 | 213.7101 |
+| male   | Adelie    | 192.4110 | 178 | 210 |  73 | 6.599317 | 0.7723917 | 189.00 | 193.0 | 197.00 | 190.8971 | 193.9248 |
+| male   | Chinstrap | 199.9118 | 187 | 212 |  34 | 5.976559 | 1.0249713 | 196.00 | 200.5 | 203.00 | 197.9028 | 201.9207 |
+| male   | Gentoo    | 221.5410 | 208 | 231 |  61 | 5.673252 | 0.7263855 | 218.00 | 221.0 | 225.00 | 220.1173 | 222.9647 |
+
+## make_many_summaries()
+
+This is a useful function for running make_summary() over many
+variables, and storing them all in one place
+
+``` r
+my_summaries <- make_many_summaries(data = df,
+                  summarization_vars = c("bill_length_mm", "flipper_length_mm", "body_mass_g"),
+                  group_vars= c("species", "sex"))
+my_summaries
+#> $bill_length_mm
+#> # A tibble: 6 x 13
+#> # Groups:   species [3]
+#>   species   sex     mean   min   max     n std_dev    se   y25   y50   y75  loci
+#>   <fct>     <fct>  <dbl> <dbl> <dbl> <int>   <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+#> 1 Adelie    female  37.3  32.1  42.2    73    2.03 0.237  35.9  37    38.8  36.8
+#> 2 Adelie    male    40.4  34.6  46      73    2.28 0.267  39    40.6  41.5  39.9
+#> 3 Chinstrap female  46.6  40.9  58      34    3.11 0.533  45.4  46.3  47.4  45.5
+#> 4 Chinstrap male    51.1  48.5  55.8    34    1.56 0.268  50.0  51.0  52.0  50.6
+#> 5 Gentoo    female  45.6  40.9  50.5    58    2.05 0.269  43.8  45.5  46.9  45.0
+#> 6 Gentoo    male    49.5  44.4  59.6    61    2.72 0.348  48.1  49.5  50.5  48.8
+#> # i 1 more variable: upci <dbl>
+#> 
+#> $flipper_length_mm
+#> # A tibble: 6 x 13
+#> # Groups:   species [3]
+#>   species   sex     mean   min   max     n std_dev    se   y25   y50   y75  loci
+#>   <fct>     <fct>  <dbl> <int> <int> <int>   <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+#> 1 Adelie    female  188.   172   202    73    5.60 0.655  185   188   191   187.
+#> 2 Adelie    male    192.   178   210    73    6.60 0.772  189   193   197   191.
+#> 3 Chinstrap female  192.   178   202    34    5.75 0.987  187.  192   196.  190.
+#> 4 Chinstrap male    200.   187   212    34    5.98 1.02   196   200.  203   198.
+#> 5 Gentoo    female  213.   203   222    58    3.90 0.512  210   212   215   212.
+#> 6 Gentoo    male    222.   208   231    61    5.67 0.726  218   221   225   220.
+#> # i 1 more variable: upci <dbl>
+#> 
+#> $body_mass_g
+#> # A tibble: 6 x 13
+#> # Groups:   species [3]
+#>   species   sex     mean   min   max     n std_dev    se   y25   y50   y75  loci
+#>   <fct>     <fct>  <dbl> <int> <int> <int>   <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+#> 1 Adelie    female 3369.  2850  3900    73    269.  31.5 3175   3400 3550  3307.
+#> 2 Adelie    male   4043.  3325  4775    73    347.  40.6 3800   4000 4300  3964.
+#> 3 Chinstrap female 3527.  2700  4150    34    285.  48.9 3362.  3550 3694. 3431.
+#> 4 Chinstrap male   3939.  3250  4800    34    362.  62.1 3731.  3950 4100  3817.
+#> 5 Gentoo    female 4680.  3950  5200    58    282.  37.0 4462.  4700 4875  4607.
+#> 6 Gentoo    male   5485.  4750  6300    61    313.  40.1 5300   5500 5700  5406.
+#> # i 1 more variable: upci <dbl>
+```
 
 Running ANOVA, nothing i take credit for.
 
@@ -83,14 +133,14 @@ flipper_summary <- merge_emmeans_summary(flipper_summary, flipper_emmeans)
 knitr::kable(flipper_summary)
 ```
 
-| species   | sex    |     mean | min | max |   n |  std_dev |        se |    y25 |   y50 |    y75 |     loci |     upci |   emmean | emmean_se | emmean_loci | emmean_upci |
-|:----------|:-------|---------:|----:|----:|----:|---------:|----------:|-------:|------:|-------:|---------:|---------:|---------:|----------:|------------:|------------:|
-| Adelie    | female | 187.7945 | 172 | 202 |  73 | 5.595035 | 0.6548493 | 185.00 | 188.0 | 191.00 | 186.5110 | 189.0780 | 187.7945 | 0.6618982 |    186.4924 |    189.0966 |
-| Adelie    | male   | 192.4110 | 178 | 210 |  73 | 6.599317 | 0.7723917 | 189.00 | 193.0 | 197.00 | 190.8971 | 193.9248 | 191.7353 | 0.9698693 |    189.8273 |    193.6433 |
-| Chinstrap | female | 191.7353 | 178 | 202 |  34 | 5.754096 | 0.9868194 | 187.25 | 192.0 | 195.75 | 189.8011 | 193.6695 | 212.7069 | 0.7425722 |    211.2461 |    214.1677 |
-| Chinstrap | male   | 199.9118 | 187 | 212 |  34 | 5.976559 | 1.0249713 | 196.00 | 200.5 | 203.00 | 197.9028 | 201.9207 | 192.4110 | 0.6618982 |    191.1088 |    193.7131 |
-| Gentoo    | female | 212.7069 | 203 | 222 |  58 | 3.897857 | 0.5118136 | 210.00 | 212.0 | 215.00 | 211.7037 | 213.7101 | 199.9118 | 0.9698693 |    198.0038 |    201.8197 |
-| Gentoo    | male   | 221.5410 | 208 | 231 |  61 | 5.673252 | 0.7263855 | 218.00 | 221.0 | 225.00 | 220.1173 | 222.9647 | 221.5410 | 0.7240820 |    220.1165 |    222.9654 |
+| sex    | species   |     mean | min | max |   n |  std_dev |        se |    y25 |   y50 |    y75 |     loci |     upci |   emmean | emmean_se | emmean_loci | emmean_upci |
+|:-------|:----------|---------:|----:|----:|----:|---------:|----------:|-------:|------:|-------:|---------:|---------:|---------:|----------:|------------:|------------:|
+| female | Adelie    | 187.7945 | 172 | 202 |  73 | 5.595035 | 0.6548493 | 185.00 | 188.0 | 191.00 | 186.5110 | 189.0780 | 187.7945 | 0.6618982 |    186.4924 |    189.0966 |
+| female | Chinstrap | 191.7353 | 178 | 202 |  34 | 5.754096 | 0.9868194 | 187.25 | 192.0 | 195.75 | 189.8011 | 193.6695 | 191.7353 | 0.9698693 |    189.8273 |    193.6433 |
+| female | Gentoo    | 212.7069 | 203 | 222 |  58 | 3.897857 | 0.5118136 | 210.00 | 212.0 | 215.00 | 211.7037 | 213.7101 | 212.7069 | 0.7425722 |    211.2461 |    214.1677 |
+| male   | Adelie    | 192.4110 | 178 | 210 |  73 | 6.599317 | 0.7723917 | 189.00 | 193.0 | 197.00 | 190.8971 | 193.9248 | 192.4110 | 0.6618982 |    191.1088 |    193.7131 |
+| male   | Chinstrap | 199.9118 | 187 | 212 |  34 | 5.976559 | 1.0249713 | 196.00 | 200.5 | 203.00 | 197.9028 | 201.9207 | 199.9118 | 0.9698693 |    198.0038 |    201.8197 |
+| male   | Gentoo    | 221.5410 | 208 | 231 |  61 | 5.673252 | 0.7263855 | 218.00 | 221.0 | 225.00 | 220.1173 | 222.9647 | 221.5410 | 0.7240820 |    220.1165 |    222.9654 |
 
 ## planned comparisons
 
@@ -302,7 +352,7 @@ ggdist::scale_fill_ramp_discrete(range = c(0.0, 1),
   guides(fill_ramp = "none")
 ```
 
-<img src="man/figures/README-unnamed-chunk-11-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-12-1.png" width="100%" />
 
 For posterity, here is a plot with just faded density slabs
 
@@ -342,4 +392,4 @@ ggplot(data = df,
   theme_basic()
 ```
 
-<img src="man/figures/README-unnamed-chunk-12-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-13-1.png" width="100%" />

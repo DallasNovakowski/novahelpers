@@ -55,10 +55,22 @@ df <- df[complete.cases(df)==TRUE, ]
 Summarizes our relevant descriptive stats
 
 ```{r cars}
-flipper_summary <- make_summary(data = df, dv = flipper_length_mm, grouping1 = species, grouping2 = sex)
+flipper_summary <- make_summary(df, c("sex", "species"), "flipper_length_mm")
 
 knitr::kable(flipper_summary)
 ```
+
+## make_many_summaries()
+
+This is a useful function for running make_summary() over many variables, and storing them all in one place
+
+```{r}
+my_summaries <- make_many_summaries(data = df,
+                  summarization_vars = c("bill_length_mm", "flipper_length_mm", "body_mass_g"),
+                  group_vars= c("species", "sex"))
+my_summaries
+```
+
 
 Running ANOVA, nothing i take credit for.
 

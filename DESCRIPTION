@@ -19,7 +19,8 @@ Imports:
     emmeans,
     cowplot,
     ggtext,
-    ggplot2
+    ggplot2,
+    rlang
 URL: https://github.com/DallasNovakowski/novahelpers
 BugReports: https://github.com/DallasNovakowski/novahelpers/issues
 Suggests: 

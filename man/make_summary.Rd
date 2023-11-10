@@ -4,18 +4,14 @@
 \alias{make_summary}
 \title{This function generates a summary table with various statistics for the specified grouping variables and dependent variable.}
 \usage{
-make_summary(data, dv, grouping1, grouping2, grouping3)
+make_summary(data, group_vars, summarization_var)
 }
 \arguments{
 \item{data}{The targeted dataframe}
 
-\item{dv}{The name of the variable we want to summarize}
+\item{group_vars}{a character string/vector of your grouping variables}
 
-\item{grouping1}{One grouping variable}
-
-\item{grouping2}{A second grouping variable}
-
-\item{grouping3}{A third grouping variable}
+\item{summarization_var}{a character string of your targeted summary variable}
 }
 \value{
 A dataframe with summary statistics
