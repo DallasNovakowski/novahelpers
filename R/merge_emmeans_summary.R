@@ -1,6 +1,6 @@
 #' This function takes summary data and a tidy emmeans object and adds emmeans-related columns to the summary data
 
-#' @param summary_data The  dataframe output of make_summary
+#' @param summary_data The  dataframe output of run_summary
 #' @param emmean_obj The tidy dataframe
 #' @return A dataframe with summary statistics
 #' @export

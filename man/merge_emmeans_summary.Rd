@@ -7,7 +7,7 @@
 merge_emmeans_summary(summary_data, emmean_obj)
 }
 \arguments{
-\item{summary_data}{The  dataframe output of make_summary}
+\item{summary_data}{The  dataframe output of run_summary}
 
 \item{emmean_obj}{The tidy dataframe}
 }

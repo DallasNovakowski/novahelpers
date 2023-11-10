@@ -5,14 +5,14 @@
 #' @param  summarization_var a character string of your targeted summary variable
 #' @importFrom dplyr group_by summarise n
 #' @importFrom stats sd quantile median
-#' @importFrom rlang sym syms
+#' @importFrom rlang sym syms .data
 #' @importFrom moments skewness kurtosis
 #' @return A dataframe with summary statistics
 #' @export
 
 
 # This function generates a summary table with various statistics for the specified grouping variables and dependent variable.
-make_summary <- function(data, group_vars, summarization_var) {
+run_summary <- function(data, group_vars, summarization_var) {
   data %>%
     group_by(!!!syms(group_vars)) %>%
     dplyr::summarise(
@@ -21,8 +21,8 @@ make_summary <- function(data, group_vars, summarization_var) {
       mean = mean(!!sym(summarization_var)),             # Calculate the mean of the dependent variable
       std_dev = sd(!!sym(summarization_var)),           # Calculate the standard deviation
       se = sd(!!sym(summarization_var)) / base::sqrt(n()), # Calculate the standard error
-      loci = mean(!!sym(summarization_var)) - 1.96 * se, # Calculate the lower confidence interval
-      upci = mean(!!sym(summarization_var)) + 1.96 * se,  # Calculate the upper confidence interval
+      loci = mean(!!sym(summarization_var)) - 1.96 * .data$se, # Calculate the lower confidence interval
+      upci = mean(!!sym(summarization_var)) + 1.96 * .data$se,  # Calculate the upper confidence interval
       min = min(!!sym(summarization_var)),               # Calculate the minimum
       max = max(!!sym(summarization_var)),               # Calculate the maximum
       y25 = quantile(!!sym(summarization_var), 0.25),    # Calculate the 25th percentile
@@ -35,7 +35,7 @@ make_summary <- function(data, group_vars, summarization_var) {
   
 }
 
-# make_summary(df, c("sex", "species"), "flipper_length_mm")
+# run_summary(df, c("sex", "species"), "flipper_length_mm")
 
 # custom_summarize(df, c("sex", "species"), "flipper_length_mm")
 # 

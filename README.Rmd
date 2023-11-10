@@ -49,26 +49,17 @@ df <- palmerpenguins::penguins
 df <- df[complete.cases(df)==TRUE, ]
 ```
 
-## make_summary()
+## run_summary()
 
 Summarizes our relevant descriptive stats
 
 ```{r cars}
-flipper_summary <- make_summary(df, c("sex", "species"), "flipper_length_mm")
+flipper_summary <- run_summary(df, c("sex", "species"), "flipper_length_mm")
 
 knitr::kable(flipper_summary)
 ```
 
-## make_many_summaries()
 
-This is a useful function for running make_summary() over many variables, and storing them all in one place
-
-```{r}
-my_summaries <- make_many_summaries(data = df,
-                  summarization_vars = c("bill_length_mm", "flipper_length_mm", "body_mass_g"),
-                  group_vars= c("species", "sex"))
-my_summaries
-```
 
 Running ANOVA, nothing i take credit for.
 
@@ -78,6 +69,9 @@ Running ANOVA, nothing i take credit for.
 contrasts(df$species) <- contr.sum
 
 contrasts(df$sex) <- contr.sum
+
+# consider just using afex - https://www.rdocumentation.org/packages/afex/versions/1.3-0
+#a <- aov_ez("id", "log_rt", fhch, between = "task", within = c("stimulus", "length"))
 
 # Type 3 anova with orthogonal contrasts
 flipper_fit <- lm(flipper_length_mm ~ species*sex, data = df)
@@ -89,7 +83,7 @@ flipper_emmeans <- emmeans::emmeans(flipper_fit, specs = pairwise ~ species*sex)
 
 ## merge_emmeans_summary()
 
-Combines our `make_summary()` output with `emmeans` object
+Combines our `run_summary()` output with `emmeans` object
 
 ```{r}
 flipper_summary <- merge_emmeans_summary(flipper_summary, flipper_emmeans)
@@ -109,6 +103,7 @@ adelie_female = c(1, 0, 0, 0, 0, 0)
 
 contrast(flipper_just_emmeans, method = list("Adelie female - Chinstrap female" =  adelie_female-chinstrap_female) )
 ```
+
 
 ## calculate_and_merge_effect_sizes()
 
@@ -305,3 +300,82 @@ ggplot(data = df,
                   position = position_dodge2nudge(x= -.05, width = .6)) + 
   theme_basic()
 ```
+
+
+# many
+
+## run_many_summaries()
+
+This is a useful function for running run_summary() over many variables, and storing them all in one place
+
+```{r}
+
+dv_vars <- c("bill_length_mm", "flipper_length_mm", "body_mass_g")
+grouping_vars <- c("species", "sex")
+
+summary_list <- run_many_summaries(data = df,
+                  summarization_vars = dv_vars,
+                  group_vars = grouping_vars)
+summary_list
+```
+
+
+## run_many_lm()
+
+```{r}
+lm_results_list <- run_many_lm(data = df, 
+                                independent_variable = grouping_vars, 
+                                dependent_variables = dv_vars)
+
+
+# or just run
+
+# results <- list()
+# for (var in c("bill_length_mm", "flipper_length_mm", "body_mass_g")) {
+#   formula <- as.formula(paste(var, "~", paste(c("species", "sex"), 
+#                                               collapse = "*")))
+#   model <- lm(formula, data = df)
+#   results[[var]] <- model
+# }
+
+```
+
+## run_many_emmeans()
+
+```{r}
+emmeans_specs <- ~ species * sex
+
+run_many_emmeans <- function(lm_results_list, emmeans_specs) {
+  emmeans_results <- list()
+  
+  for (var in names(lm_results_list)) {
+    lm_model <- lm_results_list[[var]]
+    emmeans_model <- emmeans::emmeans(lm_model, specs = emmeans_specs)
+    emmeans_results[[var]] <- emmeans_model
+  }
+  
+  return(emmeans_results)
+}
+
+
+emmeans_results_list <- run_many_emmeans(lm_results_list, emmeans_specs)
+
+emmeans_results_list
+```
+
+
+## run_many_anovas()
+
+```{r}
+anova_results_list <- run_many_anovas(lm_results_list, type = "III")
+```
+
+
+
+## merge_many_emmeans_summary()
+
+```{r}
+merge_many_emmeans_summary(summary_list, emmeans_results_list, grouping_vars = c("species", "sex"))
+
+```
+

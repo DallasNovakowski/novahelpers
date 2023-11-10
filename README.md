@@ -38,12 +38,12 @@ df <- palmerpenguins::penguins
 df <- df[complete.cases(df)==TRUE, ]
 ```
 
-## make_summary()
+## run_summary()
 
 Summarizes our relevant descriptive stats
 
 ``` r
-flipper_summary <- make_summary(df, c("sex", "species"), "flipper_length_mm")
+flipper_summary <- run_summary(df, c("sex", "species"), "flipper_length_mm")
 
 knitr::kable(flipper_summary)
 ```
@@ -57,59 +57,6 @@ knitr::kable(flipper_summary)
 | male   | Chinstrap |             0 |  34 | 199.9118 | 5.976559 | 1.0249713 | 197.9028 | 201.9207 | 187 | 212 | 196.00 | 200.5 | 203.00 | 0.0298960 |  0.1802548 | 2.499375 |
 | male   | Gentoo    |             0 |  61 | 221.5410 | 5.673252 | 0.7263855 | 220.1173 | 222.9647 | 208 | 231 | 218.00 | 221.0 | 225.00 | 0.0256081 | -0.1079373 | 2.351827 |
 
-## make_many_summaries()
-
-This is a useful function for running make_summary() over many
-variables, and storing them all in one place
-
-``` r
-my_summaries <- make_many_summaries(data = df,
-                  summarization_vars = c("bill_length_mm", "flipper_length_mm", "body_mass_g"),
-                  group_vars= c("species", "sex"))
-my_summaries
-#> $bill_length_mm
-#> # A tibble: 6 x 17
-#> # Groups:   species [3]
-#>   species  sex   missing_count     n  mean std_dev    se  loci  upci   min   max
-#>   <fct>    <fct>         <int> <int> <dbl>   <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
-#> 1 Adelie   fema~             0    73  37.3    2.03 0.237  36.8  37.7  32.1  42.2
-#> 2 Adelie   male              0    73  40.4    2.28 0.267  39.9  40.9  34.6  46  
-#> 3 Chinstr~ fema~             0    34  46.6    3.11 0.533  45.5  47.6  40.9  58  
-#> 4 Chinstr~ male              0    34  51.1    1.56 0.268  50.6  51.6  48.5  55.8
-#> 5 Gentoo   fema~             0    58  45.6    2.05 0.269  45.0  46.1  40.9  50.5
-#> 6 Gentoo   male              0    61  49.5    2.72 0.348  48.8  50.2  44.4  59.6
-#> # i 6 more variables: y25 <dbl>, y50 <dbl>, y75 <dbl>, coef_var <dbl>,
-#> #   skewness <dbl>, kurtosis <dbl>
-#> 
-#> $flipper_length_mm
-#> # A tibble: 6 x 17
-#> # Groups:   species [3]
-#>   species  sex   missing_count     n  mean std_dev    se  loci  upci   min   max
-#>   <fct>    <fct>         <int> <int> <dbl>   <dbl> <dbl> <dbl> <dbl> <int> <int>
-#> 1 Adelie   fema~             0    73  188.    5.60 0.655  187.  189.   172   202
-#> 2 Adelie   male              0    73  192.    6.60 0.772  191.  194.   178   210
-#> 3 Chinstr~ fema~             0    34  192.    5.75 0.987  190.  194.   178   202
-#> 4 Chinstr~ male              0    34  200.    5.98 1.02   198.  202.   187   212
-#> 5 Gentoo   fema~             0    58  213.    3.90 0.512  212.  214.   203   222
-#> 6 Gentoo   male              0    61  222.    5.67 0.726  220.  223.   208   231
-#> # i 6 more variables: y25 <dbl>, y50 <dbl>, y75 <dbl>, coef_var <dbl>,
-#> #   skewness <dbl>, kurtosis <dbl>
-#> 
-#> $body_mass_g
-#> # A tibble: 6 x 17
-#> # Groups:   species [3]
-#>   species  sex   missing_count     n  mean std_dev    se  loci  upci   min   max
-#>   <fct>    <fct>         <int> <int> <dbl>   <dbl> <dbl> <dbl> <dbl> <int> <int>
-#> 1 Adelie   fema~             0    73 3369.    269.  31.5 3307. 3431.  2850  3900
-#> 2 Adelie   male              0    73 4043.    347.  40.6 3964. 4123.  3325  4775
-#> 3 Chinstr~ fema~             0    34 3527.    285.  48.9 3431. 3623.  2700  4150
-#> 4 Chinstr~ male              0    34 3939.    362.  62.1 3817. 4061.  3250  4800
-#> 5 Gentoo   fema~             0    58 4680.    282.  37.0 4607. 4752.  3950  5200
-#> 6 Gentoo   male              0    61 5485.    313.  40.1 5406. 5563.  4750  6300
-#> # i 6 more variables: y25 <dbl>, y50 <dbl>, y75 <dbl>, coef_var <dbl>,
-#> #   skewness <dbl>, kurtosis <dbl>
-```
-
 Running ANOVA, nothing i take credit for.
 
 ``` r
@@ -118,6 +65,9 @@ Running ANOVA, nothing i take credit for.
 contrasts(df$species) <- contr.sum
 
 contrasts(df$sex) <- contr.sum
+
+# consider just using afex - https://www.rdocumentation.org/packages/afex/versions/1.3-0
+#a <- aov_ez("id", "log_rt", fhch, between = "task", within = c("stimulus", "length"))
 
 # Type 3 anova with orthogonal contrasts
 flipper_fit <- lm(flipper_length_mm ~ species*sex, data = df)
@@ -129,7 +79,7 @@ flipper_emmeans <- emmeans::emmeans(flipper_fit, specs = pairwise ~ species*sex)
 
 ## merge_emmeans_summary()
 
-Combines our `make_summary()` output with `emmeans` object
+Combines our `run_summary()` output with `emmeans` object
 
 ``` r
 flipper_summary <- merge_emmeans_summary(flipper_summary, flipper_emmeans)
@@ -356,7 +306,7 @@ ggdist::scale_fill_ramp_discrete(range = c(0.0, 1),
   guides(fill_ramp = "none")
 ```
 
-<img src="man/figures/README-unnamed-chunk-12-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-11-1.png" width="100%" />
 
 For posterity, here is a plot with just faded density slabs
 
@@ -396,4 +346,217 @@ ggplot(data = df,
   theme_basic()
 ```
 
-<img src="man/figures/README-unnamed-chunk-13-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-12-1.png" width="100%" />
+
+# many
+
+## run_many_summaries()
+
+This is a useful function for running run_summary() over many variables,
+and storing them all in one place
+
+``` r
+
+dv_vars <- c("bill_length_mm", "flipper_length_mm", "body_mass_g")
+grouping_vars <- c("species", "sex")
+
+summary_list <- run_many_summaries(data = df,
+                  summarization_vars = dv_vars,
+                  group_vars = grouping_vars)
+summary_list
+#> $bill_length_mm
+#> # A tibble: 6 x 17
+#> # Groups:   species [3]
+#>   species  sex   missing_count     n  mean std_dev    se  loci  upci   min   max
+#>   <fct>    <fct>         <int> <int> <dbl>   <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+#> 1 Adelie   fema~             0    73  37.3    2.03 0.237  36.8  37.7  32.1  42.2
+#> 2 Adelie   male              0    73  40.4    2.28 0.267  39.9  40.9  34.6  46  
+#> 3 Chinstr~ fema~             0    34  46.6    3.11 0.533  45.5  47.6  40.9  58  
+#> 4 Chinstr~ male              0    34  51.1    1.56 0.268  50.6  51.6  48.5  55.8
+#> 5 Gentoo   fema~             0    58  45.6    2.05 0.269  45.0  46.1  40.9  50.5
+#> 6 Gentoo   male              0    61  49.5    2.72 0.348  48.8  50.2  44.4  59.6
+#> # i 6 more variables: y25 <dbl>, y50 <dbl>, y75 <dbl>, coef_var <dbl>,
+#> #   skewness <dbl>, kurtosis <dbl>
+#> 
+#> $flipper_length_mm
+#> # A tibble: 6 x 17
+#> # Groups:   species [3]
+#>   species  sex   missing_count     n  mean std_dev    se  loci  upci   min   max
+#>   <fct>    <fct>         <int> <int> <dbl>   <dbl> <dbl> <dbl> <dbl> <int> <int>
+#> 1 Adelie   fema~             0    73  188.    5.60 0.655  187.  189.   172   202
+#> 2 Adelie   male              0    73  192.    6.60 0.772  191.  194.   178   210
+#> 3 Chinstr~ fema~             0    34  192.    5.75 0.987  190.  194.   178   202
+#> 4 Chinstr~ male              0    34  200.    5.98 1.02   198.  202.   187   212
+#> 5 Gentoo   fema~             0    58  213.    3.90 0.512  212.  214.   203   222
+#> 6 Gentoo   male              0    61  222.    5.67 0.726  220.  223.   208   231
+#> # i 6 more variables: y25 <dbl>, y50 <dbl>, y75 <dbl>, coef_var <dbl>,
+#> #   skewness <dbl>, kurtosis <dbl>
+#> 
+#> $body_mass_g
+#> # A tibble: 6 x 17
+#> # Groups:   species [3]
+#>   species  sex   missing_count     n  mean std_dev    se  loci  upci   min   max
+#>   <fct>    <fct>         <int> <int> <dbl>   <dbl> <dbl> <dbl> <dbl> <int> <int>
+#> 1 Adelie   fema~             0    73 3369.    269.  31.5 3307. 3431.  2850  3900
+#> 2 Adelie   male              0    73 4043.    347.  40.6 3964. 4123.  3325  4775
+#> 3 Chinstr~ fema~             0    34 3527.    285.  48.9 3431. 3623.  2700  4150
+#> 4 Chinstr~ male              0    34 3939.    362.  62.1 3817. 4061.  3250  4800
+#> 5 Gentoo   fema~             0    58 4680.    282.  37.0 4607. 4752.  3950  5200
+#> 6 Gentoo   male              0    61 5485.    313.  40.1 5406. 5563.  4750  6300
+#> # i 6 more variables: y25 <dbl>, y50 <dbl>, y75 <dbl>, coef_var <dbl>,
+#> #   skewness <dbl>, kurtosis <dbl>
+```
+
+## run_many_lm()
+
+``` r
+lm_results_list <- run_many_lm(data = df, 
+                                independent_variable = grouping_vars, 
+                                dependent_variables = dv_vars)
+
+
+# or just run
+
+# results <- list()
+# for (var in c("bill_length_mm", "flipper_length_mm", "body_mass_g")) {
+#   formula <- as.formula(paste(var, "~", paste(c("species", "sex"), 
+#                                               collapse = "*")))
+#   model <- lm(formula, data = df)
+#   results[[var]] <- model
+# }
+```
+
+## run_many_emmeans()
+
+``` r
+emmeans_specs <- ~ species * sex
+
+run_many_emmeans <- function(lm_results_list, emmeans_specs) {
+  emmeans_results <- list()
+  
+  for (var in names(lm_results_list)) {
+    lm_model <- lm_results_list[[var]]
+    emmeans_model <- emmeans::emmeans(lm_model, specs = emmeans_specs)
+    emmeans_results[[var]] <- emmeans_model
+  }
+  
+  return(emmeans_results)
+}
+
+
+emmeans_results_list <- run_many_emmeans(lm_results_list, emmeans_specs)
+
+emmeans_results_list
+#> $bill_length_mm
+#>  species   sex    emmean    SE  df lower.CL upper.CL
+#>  Adelie    female   37.3 0.271 327     36.7     37.8
+#>  Chinstrap female   46.6 0.397 327     45.8     47.4
+#>  Gentoo    female   45.6 0.304 327     45.0     46.2
+#>  Adelie    male     40.4 0.271 327     39.9     40.9
+#>  Chinstrap male     51.1 0.397 327     50.3     51.9
+#>  Gentoo    male     49.5 0.296 327     48.9     50.1
+#> 
+#> Confidence level used: 0.95 
+#> 
+#> $flipper_length_mm
+#>  species   sex    emmean    SE  df lower.CL upper.CL
+#>  Adelie    female    188 0.662 327      186      189
+#>  Chinstrap female    192 0.970 327      190      194
+#>  Gentoo    female    213 0.743 327      211      214
+#>  Adelie    male      192 0.662 327      191      194
+#>  Chinstrap male      200 0.970 327      198      202
+#>  Gentoo    male      222 0.724 327      220      223
+#> 
+#> Confidence level used: 0.95 
+#> 
+#> $body_mass_g
+#>  species   sex    emmean   SE  df lower.CL upper.CL
+#>  Adelie    female   3369 36.2 327     3298     3440
+#>  Chinstrap female   3527 53.1 327     3423     3632
+#>  Gentoo    female   4680 40.6 327     4600     4760
+#>  Adelie    male     4043 36.2 327     3972     4115
+#>  Chinstrap male     3939 53.1 327     3835     4043
+#>  Gentoo    male     5485 39.6 327     5407     5563
+#> 
+#> Confidence level used: 0.95
+```
+
+## run_many_anovas()
+
+``` r
+anova_results_list <- run_many_anovas(lm_results_list, type = "III")
+```
+
+## merge_many_emmeans_summary()
+
+``` r
+merge_many_emmeans_summary(summary_list, emmeans_results_list, grouping_vars = c("species", "sex"))
+#> $bill_length_mm
+#>     species    sex missing_count  n     mean  std_dev        se     loci
+#> 1    Adelie female             0 73 37.25753 2.028883 0.2374628 36.79211
+#> 2    Adelie   male             0 73 40.39041 2.277131 0.2665180 39.86804
+#> 3 Chinstrap female             0 34 46.57353 3.108669 0.5331324 45.52859
+#> 4 Chinstrap   male             0 34 51.09412 1.564558 0.2683196 50.56821
+#> 5    Gentoo female             0 58 45.56379 2.051247 0.2693419 45.03588
+#> 6    Gentoo   male             0 61 49.47377 2.720594 0.3483364 48.79103
+#>       upci  min  max    y25   y50    y75   coef_var    skewness kurtosis
+#> 1 37.72296 32.1 42.2 35.900 37.00 38.800 0.05445564  0.02785804 2.690518
+#> 2 40.91279 34.6 46.0 39.000 40.60 41.500 0.05637800  0.05642379 3.263138
+#> 3 47.61847 40.9 58.0 45.425 46.30 47.375 0.06674755  1.32612795 6.753174
+#> 4 51.62002 48.5 55.8 50.050 50.95 51.975 0.03062111  0.80466563 3.965757
+#> 5 46.09170 40.9 50.5 43.850 45.50 46.875 0.04501923 -0.03016883 2.596070
+#> 6 50.15651 44.4 59.6 48.100 49.50 50.500 0.05499064  0.91023881 5.219030
+#>     emmean emmean_se  df emmean_loci emmean_upci
+#> 1 37.25753 0.2710177 327    36.72438    37.79069
+#> 2 40.39041 0.2710177 327    39.85725    40.92357
+#> 3 46.57353 0.3971180 327    45.79230    47.35476
+#> 4 51.09412 0.3971180 327    50.31289    51.87535
+#> 5 45.56379 0.3040500 327    44.96565    46.16193
+#> 6 49.47377 0.2964791 327    48.89052    50.05702
+#> 
+#> $flipper_length_mm
+#>     species    sex missing_count  n     mean  std_dev        se     loci
+#> 1    Adelie female             0 73 187.7945 5.595035 0.6548493 186.5110
+#> 2    Adelie   male             0 73 192.4110 6.599317 0.7723917 190.8971
+#> 3 Chinstrap female             0 34 191.7353 5.754096 0.9868194 189.8011
+#> 4 Chinstrap   male             0 34 199.9118 5.976558 1.0249713 197.9028
+#> 5    Gentoo female             0 58 212.7069 3.897856 0.5118136 211.7037
+#> 6    Gentoo   male             0 61 221.5410 5.673252 0.7263855 220.1173
+#>       upci min max    y25   y50    y75   coef_var    skewness kurtosis   emmean
+#> 1 189.0780 172 202 185.00 188.0 191.00 0.02979339 -0.29838252 3.487783 187.7945
+#> 2 193.9248 178 210 189.00 193.0 197.00 0.03429803  0.03995108 3.012400 192.4110
+#> 3 193.6695 178 202 187.25 192.0 195.75 0.03001063 -0.40858105 2.680323 191.7353
+#> 4 201.9207 187 212 196.00 200.5 203.00 0.02989598  0.18025476 2.499375 199.9118
+#> 5 213.7101 203 222 210.00 212.0 215.00 0.01832501  0.21753580 2.620230 212.7069
+#> 6 222.9647 208 231 218.00 221.0 225.00 0.02560814 -0.10793726 2.351827 221.5410
+#>   emmean_se  df emmean_loci emmean_upci
+#> 1 0.6618982 327    186.4924    189.0966
+#> 2 0.6618982 327    191.1088    193.7131
+#> 3 0.9698693 327    189.8273    193.6433
+#> 4 0.9698693 327    198.0038    201.8197
+#> 5 0.7425722 327    211.2461    214.1677
+#> 6 0.7240820 327    220.1165    222.9654
+#> 
+#> $body_mass_g
+#>     species    sex missing_count  n     mean  std_dev       se     loci
+#> 1    Adelie female             0 73 3368.836 269.3801 31.52856 3307.040
+#> 2    Adelie   male             0 73 4043.493 346.8116 40.59122 3963.934
+#> 3 Chinstrap female             0 34 3527.206 285.3339 48.93436 3431.295
+#> 4 Chinstrap   male             0 34 3938.971 362.1376 62.10608 3817.243
+#> 5    Gentoo female             0 58 4679.741 281.5783 36.97304 4607.274
+#> 6    Gentoo   male             0 61 5484.836 313.1586 40.09585 5406.248
+#>       upci  min  max     y25  y50     y75   coef_var    skewness kurtosis
+#> 1 3430.632 2850 3900 3175.00 3400 3550.00 0.07996238 -0.06386450 2.175554
+#> 2 4123.052 3325 4775 3800.00 4000 4300.00 0.08577028  0.15892067 2.354934
+#> 3 3623.117 2700 4150 3362.50 3550 3693.75 0.08089517 -0.61136344 4.143221
+#> 4 4060.699 3250 4800 3731.25 3950 4100.00 0.09193710  0.23421597 2.768810
+#> 5 4752.209 3950 5200 4462.50 4700 4875.00 0.06016963 -0.32891168 2.627605
+#> 6 5563.424 4750 6300 5300.00 5500 5700.00 0.05709534  0.07737749 2.785910
+#>     emmean emmean_se  df emmean_loci emmean_upci
+#> 1 3368.836  36.21222 327    3297.597    3440.074
+#> 2 4043.493  36.21222 327    3972.255    4114.731
+#> 3 3527.206  53.06120 327    3422.821    3631.590
+#> 4 3938.971  53.06120 327    3834.586    4043.355
+#> 5 4679.741  40.62586 327    4599.820    4759.662
+#> 6 5484.836  39.61427 327    5406.905    5562.767
+```

@@ -21,7 +21,8 @@ Imports:
     ggtext,
     ggplot2,
     rlang,
-    moments
+    moments,
+    car
 URL: https://github.com/DallasNovakowski/novahelpers
 BugReports: https://github.com/DallasNovakowski/novahelpers/issues
 Suggests: 
