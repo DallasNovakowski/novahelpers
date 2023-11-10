@@ -317,7 +317,7 @@ ggplot(data = df,
            fill = sex)) +  # our third grouping/independent/interaction variable
     ggdist::stat_slab(
                      side = "left", 
-                     scale = 0.4, 
+                     scale = 0.6, 
                      position = position_dodge(width = .6), 
                      .width = c(.50, 1),
                      aes(fill_ramp = after_stat(level))) +
@@ -524,7 +524,11 @@ anova_results_list
 ## merge_many_emmeans_summary()
 
 ``` r
-merge_many_emmeans_summary(summary_list, emmeans_results_list, grouping_vars = c("species", "sex"))
+summary_list <- merge_many_emmeans_summary(summary_list, 
+                           emmeans_results_list, 
+                           grouping_vars = c("species", "sex"))
+
+summary_list
 #> $bill_length_mm
 #>     species    sex missing_count  n     mean  std_dev        se     loci
 #> 1    Adelie female             0 73 37.25753 2.028883 0.2374628 36.79211
