@@ -368,7 +368,6 @@ ggplot(data = df,
     ggdist::stat_slab(
                      side = "left", 
                      scale = 0.4, 
-                     show.legend = F, 
                      position = position_dodge(width = .6), 
                      .width = c(.50, 1),
                      aes(fill_ramp = after_stat(level))) +
@@ -376,6 +375,7 @@ ggplot(data = df,
                                    aesthetics = c("fill_ramp")) + 
       scale_colour_manual(values = nova_palette, 
                               aesthetics = c("fill")) +   
+  guides(fill_ramp = "none") +
 
   geom_text(data = flipper_summary, 
             aes(x = species, 
