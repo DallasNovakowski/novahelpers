@@ -350,6 +350,12 @@ ggplot(data = df,
 
 # many
 
+Often, you may need to run your analysis on multiple variables (e.g.,
+mediators). The `many` family of functions lets you designate multiple
+dependent variables to run summaries, lm, emmeans, anovas, and merging
+emmeans/summaries. These functions each return a list corresponding to
+your dependent variable name.
+
 ## run_many_summaries()
 
 This is a useful function for running run_summary() over many variables,
@@ -485,6 +491,46 @@ emmeans_results_list
 
 ``` r
 anova_results_list <- run_many_anovas(lm_results_list, type = "III")
+
+anova_results_list
+#> $bill_length_mm
+#> Anova Table (Type III tests)
+#> 
+#> Response: bill_length_mm
+#>             Sum Sq  Df    F value Pr(>F)    
+#> (Intercept) 609824   1 1.1373e+05 <2e-16 ***
+#> species       6973   2 6.5021e+02 <2e-16 ***
+#> sex           1116   1 2.0806e+02 <2e-16 ***
+#> species:sex     24   2 2.2841e+00 0.1035    
+#> Residuals     1753 327                      
+#> ---
+#> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#> 
+#> $flipper_length_mm
+#> Anova Table (Type III tests)
+#> 
+#> Response: flipper_length_mm
+#>               Sum Sq  Df    F value    Pr(>F)    
+#> (Intercept) 12136922   1 3.7949e+05 < 2.2e-16 ***
+#> species        50076   2 7.8288e+02 < 2.2e-16 ***
+#> sex             3902   1 1.2202e+02 < 2.2e-16 ***
+#> species:sex      329   2 5.1442e+00  0.006314 ** 
+#> Residuals      10458 327                         
+#> ---
+#> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#> 
+#> $body_mass_g
+#> Anova Table (Type III tests)
+#> 
+#> Response: body_mass_g
+#>                 Sum Sq  Df   F value    Pr(>F)    
+#> (Intercept) 5232595969   1 54661.828 < 2.2e-16 ***
+#> species      143001222   2   746.924 < 2.2e-16 ***
+#> sex           29851220   1   311.838 < 2.2e-16 ***
+#> species:sex    1676557   2     8.757 0.0001973 ***
+#> Residuals     31302628 327                        
+#> ---
+#> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
 ## merge_many_emmeans_summary()

@@ -304,6 +304,8 @@ ggplot(data = df,
 
 # many
 
+Often, you may need to run your analysis on multiple variables (e.g., mediators). The `many` family of functions lets you designate multiple dependent variables to run summaries, lm, emmeans, anovas, and merging emmeans/summaries. These functions each return a list corresponding to your dependent variable name.
+
 ## run_many_summaries()
 
 This is a useful function for running run_summary() over many variables, and storing them all in one place
@@ -368,6 +370,8 @@ emmeans_results_list
 
 ```{r}
 anova_results_list <- run_many_anovas(lm_results_list, type = "III")
+
+anova_results_list
 ```
 
 
