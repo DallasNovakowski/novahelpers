@@ -289,7 +289,7 @@ ggplot(data = df,
             color="black", 
             size = 2.5, 
 
-            position = position_dodge2nudge(x= -.05, width = .6)) +
+            position = position_dodge2nudge(x= -.06, width = .6)) +
     geom_pointrange(data = flipper_summary, # our externally-defined summary dataframe
                   aes(x = species,  # our independent variable
                       y = mean, # our outcome/dependent variable
