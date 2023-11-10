@@ -6,7 +6,7 @@
 #' @importFrom dplyr group_by summarise n
 #' @importFrom stats sd quantile median
 #' @importFrom rlang sym syms
-#'
+#' @importFrom moments skewness kurtosis
 #' @return A dataframe with summary statistics
 #' @export
 
@@ -16,17 +16,20 @@ make_summary <- function(data, group_vars, summarization_var) {
   data %>%
     group_by(!!!syms(group_vars)) %>%
     dplyr::summarise(
-      mean = mean(!!sym(summarization_var)),             # Calculate the mean of the dependent variable
-      min = min(!!sym(summarization_var)),               # Calculate the minimum
-      max = max(!!sym(summarization_var)),               # Calculate the maximum
       n = n(),                         # Count the number of observations
+      mean = mean(!!sym(summarization_var)),             # Calculate the mean of the dependent variable
       std_dev = sd(!!sym(summarization_var)),           # Calculate the standard deviation
       se = sd(!!sym(summarization_var)) / base::sqrt(n()), # Calculate the standard error
+      loci = mean(!!sym(summarization_var)) - 1.96 * se, # Calculate the lower confidence interval
+      upci = mean(!!sym(summarization_var)) + 1.96 * se,  # Calculate the upper confidence interval
+      min = min(!!sym(summarization_var)),               # Calculate the minimum
+      max = max(!!sym(summarization_var)),               # Calculate the maximum
       y25 = quantile(!!sym(summarization_var), 0.25),    # Calculate the 25th percentile
       y50 = median(!!sym(summarization_var)),           # Calculate the median (50th percentile)
       y75 = quantile(!!sym(summarization_var), 0.75),    # Calculate the 75th percentile
-      loci = mean(!!sym(summarization_var)) - 1.96 * se, # Calculate the lower confidence interval
-      upci = mean(!!sym(summarization_var)) + 1.96 * se  # Calculate the upper confidence interval
+      coef_var = sd(!!sym(summarization_var)) / mean(!!sym(summarization_var)),  # Calculate the coefficient of variation
+      skewness = moments::skewness(!!sym(summarization_var)),  # Calculate skewness
+      kurtosis = moments::kurtosis(!!sym(summarization_var))  # Calculate kurtosis
     )
   
 }

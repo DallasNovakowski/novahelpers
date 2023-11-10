@@ -20,7 +20,8 @@ Imports:
     cowplot,
     ggtext,
     ggplot2,
-    rlang
+    rlang,
+    moments
 URL: https://github.com/DallasNovakowski/novahelpers
 BugReports: https://github.com/DallasNovakowski/novahelpers/issues
 Suggests: 
