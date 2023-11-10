@@ -347,18 +347,6 @@ lm_results_list <- run_many_lm(data = df,
 ```{r}
 emmeans_specs <- ~ species * sex
 
-run_many_emmeans <- function(lm_results_list, emmeans_specs) {
-  emmeans_results <- list()
-  
-  for (var in names(lm_results_list)) {
-    lm_model <- lm_results_list[[var]]
-    emmeans_model <- emmeans::emmeans(lm_model, specs = emmeans_specs)
-    emmeans_results[[var]] <- emmeans_model
-  }
-  
-  return(emmeans_results)
-}
-
 
 emmeans_results_list <- run_many_emmeans(lm_results_list, emmeans_specs)
 
