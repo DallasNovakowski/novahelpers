@@ -25,9 +25,11 @@ run_summary <- function(data, group_vars, summarization_var) {
       upci = mean(!!sym(summarization_var)) + 1.96 * .data$se,  # Calculate the upper confidence interval
       min = min(!!sym(summarization_var)),               # Calculate the minimum
       max = max(!!sym(summarization_var)),               # Calculate the maximum
+      y16 = quantile(!!sym(summarization_var), 0.16),
       y25 = quantile(!!sym(summarization_var), 0.25),    # Calculate the 25th percentile
       y50 = median(!!sym(summarization_var)),           # Calculate the median (50th percentile)
       y75 = quantile(!!sym(summarization_var), 0.75),    # Calculate the 75th percentile
+      y84 = quantile(!!sym(summarization_var), .84),    # Calculate the 75th percentile
       coef_var = sd(!!sym(summarization_var)) / mean(!!sym(summarization_var)),  # Calculate the coefficient of variation
       skewness = moments::skewness(!!sym(summarization_var)),  # Calculate skewness
       kurtosis = moments::kurtosis(!!sym(summarization_var))  # Calculate kurtosis
