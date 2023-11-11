@@ -369,7 +369,7 @@ ggplot(data = df,
 
   geom_text(data = flipper_summary, 
             aes(x = species, 
-                y = y16 - .05*sd(df$flipper_length_mm), 
+                y = y16 - .07*sd(df$flipper_length_mm), 
                 label = round(mean,1)),
             color="black", 
             size = 2.5, 
