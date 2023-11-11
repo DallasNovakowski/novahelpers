@@ -348,6 +348,46 @@ ggplot(data = df,
 
 <img src="man/figures/README-unnamed-chunk-12-1.png" width="100%" />
 
+Further posterity, fading based on standard deviation
+
+``` r
+ggplot(data = df,
+       aes(y = flipper_length_mm, # our dependent/response/outcome variable 
+           x = species,  # our grouping/independent/predictor variable
+           fill = sex)) +  # our third grouping/independent/interaction variable
+    ggdist::stat_slab(
+                     side = "left", 
+                     scale = 0.5, 
+                     position = position_dodge(width = .6), 
+                     .width = c(.68, 1),
+                     aes(fill_ramp = after_stat(level))) +
+  ggdist::scale_fill_ramp_discrete(range = c(0.2, 1),
+                                   aesthetics = c("fill_ramp")) + 
+      scale_colour_manual(values = nova_palette, 
+                              aesthetics = c("fill")) +   
+  guides(fill_ramp = "none") +
+
+  geom_text(data = flipper_summary, 
+            aes(x = species, 
+                y = y50 - 1.2*std_dev , 
+                label = round(mean,1)),
+            color="black", 
+            size = 2.5, 
+
+            position = position_dodge2nudge(x= -.07, width = .6)) +
+    geom_pointrange(data = flipper_summary, # our externally-defined summary dataframe
+                  aes(x = species,  # our independent variable
+                      y = mean, # our outcome/dependent variable
+                      ymin = loci,  # lower-bound confidence interval
+                      ymax = upci # upper-bound confidence interval
+                  ), 
+                  show.legend = F,
+                  position = position_dodge2nudge(x= -.05, width = .6)) + 
+  theme_basic()
+```
+
+<img src="man/figures/README-unnamed-chunk-13-1.png" width="100%" />
+
 # many
 
 Often, you may need to run your analysis on multiple variables (e.g.,
