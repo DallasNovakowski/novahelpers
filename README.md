@@ -239,7 +239,7 @@ ggplot(data = df,
        aes(y = flipper_length_mm, # our dependent/response/outcome variable 
            x = species,  # our grouping/independent/predictor variable
            fill = sex)) +  # our third grouping/independent/interaction variable
-    ggdist::stat_slab( alpha = .5,
+    ggdist::stat_slab( alpha = .4,
                      adjust = 2,
                      side = "left", 
                      scale = 0.4, 
@@ -248,7 +248,7 @@ ggplot(data = df,
                      .width = c(.50, 1),
                      aes(fill_ramp = after_stat(level))) +
   ## Add stacked dots
-  ggdist::stat_dots(alpha = .5,
+  ggdist::stat_dots(alpha = .4,
                     side = "left", 
                     scale = 0.4, 
                     aes(color = sex),
