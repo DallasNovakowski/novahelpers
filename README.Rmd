@@ -187,7 +187,7 @@ ggplot(data = df,
        aes(y = flipper_length_mm, # our dependent/response/outcome variable 
            x = species,  # our grouping/independent/predictor variable
            fill = sex)) +  # our third grouping/independent/interaction variable
-    ggdist::stat_slab( alpha = .65,
+    ggdist::stat_slab( alpha = .5,
                      adjust = 2,
                      side = "left", 
                      scale = 0.4, 
@@ -223,7 +223,7 @@ ggplot(data = df,
     scale_colour_manual(values = nova_palette, 
                               aesthetics = c("fill", "color")) +   
   ## define amount of fading
-ggdist::scale_fill_ramp_discrete(range = c(0.0, 1),
+ggdist::scale_fill_ramp_discrete(range = c(0.2, 1),
                                    aesthetics = c("fill_ramp")) + 
        labs(subtitle = paste0("**species**: ", report_tidy_anova_etaci(flipper_anova,"species"), "<br>",
                            "**sex**: ", report_tidy_anova_etaci(flipper_anova,"sex"), "<br>",
