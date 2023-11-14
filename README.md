@@ -242,8 +242,7 @@ ggplot(data = df,
   ggdist::stat_dots(alpha = 1,
                     side = "left", 
                     scale = 0.4, 
-                    aes(color = sex,
-                    fill = sex),
+                    aes(color = sex),
 
                     position = position_dodge(width = .6)) + 
   geom_text(data = flipper_summary, 
