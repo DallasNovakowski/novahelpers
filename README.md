@@ -223,6 +223,15 @@ library(ggdist)
 library(ggpubr) # significance brackets
 library(ggtext)
 
+# define-colors
+nova_palette <- c("#4ED0CD","#FFD966") ## my custom palette
+
+# very important to get the right amount of fading for your palette choice
+dark_aqua <- colorspace::darken("#4ED0CD", amount = 0.5, space = "HLS") ## darken colors
+dark_yellow <- colorspace::darken("#FFD966", amount = 0.35, space = "HLS") ## darken colors
+
+contrast_nova_palette <- c(dark_aqua, dark_yellow)
+
 # Define color palette
 nova_palette <- c("#78AAA9", "#FFDB6E")
 
@@ -239,11 +248,10 @@ ggplot(data = df,
                      .width = c(.50, 1),
                      aes(fill_ramp = after_stat(level))) +
   ## Add stacked dots
-  ggdist::stat_dots(alpha = 1,
+  ggdist::stat_dots(alpha = .5,
                     side = "left", 
                     scale = 0.4, 
                     aes(color = sex),
-
                     position = position_dodge(width = .6)) + 
   geom_text(data = flipper_summary, 
             aes(x = species, 
@@ -262,7 +270,7 @@ ggplot(data = df,
                   position = position_dodge2nudge(x= -.03, width = .6)) +
   
   
-    scale_colour_manual(values = nova_palette, 
+    scale_colour_manual(values = contrast_nova_palette, 
                               aesthetics = c("fill", "color")) +   
   ## define amount of fading
 ggdist::scale_fill_ramp_discrete(range = c(0.2, 1),
