@@ -205,7 +205,7 @@ ggplot(data = df,
                      .width = c(.50, 1),
                      aes(fill_ramp = after_stat(level))) +
   ## Add stacked dots
-  ggdist::stat_dots(alpha = .4,
+  ggdist::stat_dots(alpha = .3,
                     side = "left", 
                     scale = 0.4, 
                     aes(color = sex),
