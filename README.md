@@ -248,7 +248,7 @@ ggplot(data = df,
                      .width = c(.50, 1),
                      aes(fill_ramp = after_stat(level))) +
   ## Add stacked dots
-  ggdist::stat_dots(alpha = .3,
+  ggdist::stat_dots(alpha = .35,
                     side = "left", 
                     scale = 0.4, 
                     aes(color = sex),
@@ -318,7 +318,7 @@ ggdist::scale_fill_ramp_discrete(range = c(0.2, 1),
 For posterity, here is a plot with just faded density slabs
 
 ``` r
-ggplot(data = df,
+fadeslab <- ggplot(data = df,
        aes(y = flipper_length_mm, # our dependent/response/outcome variable 
            x = species,  # our grouping/independent/predictor variable
            fill = sex)) +  # our third grouping/independent/interaction variable
@@ -351,6 +351,8 @@ ggplot(data = df,
                   show.legend = F,
                   position = position_dodge2nudge(x= -.05, width = .6)) + 
   theme_basic()
+
+fadeslab
 ```
 
 <img src="man/figures/README-unnamed-chunk-12-1.png" width="100%" />
