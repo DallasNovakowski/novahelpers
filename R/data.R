@@ -20,8 +20,9 @@
 #'   \item{Haven't}{Replaced with "Have not"}
 #' }
 #' @source Generated for example purposes
+
+#' @export
 "contraction_replacements"
-roxygen2::export("contraction_replacements")
 
 
 
@@ -46,8 +47,9 @@ roxygen2::export("contraction_replacements")
 #' # To access the replacements
 #' abbreviation_corrections$replacement
 #' @source Generated for example purposes
+
+#' @export
 "abbreviation_corrections"
-roxygen2::export("abbreviation_corrections")
 
 
 
@@ -73,8 +75,9 @@ roxygen2::export("abbreviation_corrections")
 #' # To access specific terms
 #' anonymizing_whitelist[1:10]
 #' @source Generated for example purposes
+
+#' @export
 "anonymizing_whitelist"
-roxygen2::export("anonymizing_whitelist")
 
 
 
@@ -109,8 +112,9 @@ roxygen2::export("anonymizing_whitelist")
 #' # To access specific positions
 #' positions_to_sanitize[1:5]
 #' @source Generated for example purposes
+
+#' @export
 "positions_to_sanitize"
-roxygen2::export("positions_to_sanitize")
 
 
 
@@ -144,8 +148,9 @@ roxygen2::export("positions_to_sanitize")
 #' @source
 #' The `person_names` dataset is a synthetic compilation of common names and does not reference any specific source.
 #' It is intended for illustrative and testing purposes only.
+
+#' @export
 "person_names"
-roxygen2::export("person_names")
 
 
 
@@ -185,8 +190,9 @@ roxygen2::export("person_names")
 #' @source
 #' The `additional_to_sanitize` dataset is a synthetic compilation of names identified for sanitization and does not reference any specific source.
 #' It is intended for illustrative and data cleaning purposes only.
+
+#' @export
 "additional_to_sanitize"
-roxygen2::export("additional_to_sanitize")
 
 
 
@@ -225,5 +231,7 @@ roxygen2::export("additional_to_sanitize")
 #' @source
 #' The `curse_words_regex` dataset is a synthetic compilation of regular expressions for curse words and offensive language 
 #' and does not reference any specific source. It is intended for illustrative and text processing purposes only.
+
+#' @export
 "curse_words_regex"
-roxygen2::export("curse_words_regex")
+
