@@ -21,7 +21,7 @@
 #' }
 #' @source Generated for example purposes
 "contraction_replacements"
-export("contraction_replacements")
+roxygen2::export("contraction_replacements")
 
 
 
@@ -47,7 +47,7 @@ export("contraction_replacements")
 #' abbreviation_corrections$replacement
 #' @source Generated for example purposes
 "abbreviation_corrections"
-export("abbreviation_corrections")
+roxygen2::export("abbreviation_corrections")
 
 
 
@@ -74,7 +74,7 @@ export("abbreviation_corrections")
 #' anonymizing_whitelist[1:10]
 #' @source Generated for example purposes
 "anonymizing_whitelist"
-export("anonymizing_whitelist")
+roxygen2::export("anonymizing_whitelist")
 
 
 
@@ -110,7 +110,7 @@ export("anonymizing_whitelist")
 #' positions_to_sanitize[1:5]
 #' @source Generated for example purposes
 "positions_to_sanitize"
-export("positions_to_sanitize")
+roxygen2::export("positions_to_sanitize")
 
 
 
@@ -145,7 +145,7 @@ export("positions_to_sanitize")
 #' The `person_names` dataset is a synthetic compilation of common names and does not reference any specific source.
 #' It is intended for illustrative and testing purposes only.
 "person_names"
-export("person_names")
+roxygen2::export("person_names")
 
 
 
@@ -186,7 +186,7 @@ export("person_names")
 #' The `additional_to_sanitize` dataset is a synthetic compilation of names identified for sanitization and does not reference any specific source.
 #' It is intended for illustrative and data cleaning purposes only.
 "additional_to_sanitize"
-export("additional_to_sanitize")
+roxygen2::export("additional_to_sanitize")
 
 
 
@@ -226,4 +226,4 @@ export("additional_to_sanitize")
 #' The `curse_words_regex` dataset is a synthetic compilation of regular expressions for curse words and offensive language 
 #' and does not reference any specific source. It is intended for illustrative and text processing purposes only.
 "curse_words_regex"
-export("curse_words_regex")
+roxygen2::export("curse_words_regex")
