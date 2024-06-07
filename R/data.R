@@ -1,3 +1,18 @@
+#' A sample data vector
+#'
+#' This is a description of the data vector.
+#' @name sample_vector
+#' @docType data
+#' @keywords datasets
+#' @export
+NULL
+
+# Define the vector
+sample_vector <- c(1, 2, 3, 4, 5)
+
+
+
+
 #' Replacements for Contractions
 #'
 #' A named character vector containing contractions and their replacements.
@@ -20,8 +35,18 @@
 #'   \item{Haven't}{Replaced with "Have not"}
 #' }
 #' @source Generated for example purposes
+#' @export
 "contraction_replacements"
 
+contraction_replacements <- c(
+  "weren't" = "were not", "Weren't" = "Were not",
+  "don’t" = "do not", "Don’t" = "Do not",
+  "don't" = "do not", "Don't" = "Do not",
+  "haven't" = "have not", "Haven't" = "Have not",
+  "weren't" = "were not", "Weren't" = "Were not",
+  "don't" = "do not", "Don't" = "Do not",
+  "haven't" = "have not", "Haven't" = "Have not"
+)
 
 #' Abbreviation Corrections Data Frame
 #'
