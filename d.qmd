@@ -1,0 +1,32 @@
+---
+title: "Flextable Example"
+format:
+  docx
+  pdf
+---
+
+```{r setup, include=FALSE}
+# Load necessary libraries
+library(flextable)
+```
+
+
+```{r}
+# Create a data frame
+data <- data.frame(
+  Name = c("Alice", "Bob", "Charlie"),
+  Age = c(25, 30, 35),
+  Score = c(80, 85, 90)
+)
+
+# Create a flextable object
+ft <- flextable(data)
+
+# Customize table properties if needed
+ft <- flextable::set_table_properties(ft, width = 0.5)
+
+# Print the flextable
+ft
+
+```
+
