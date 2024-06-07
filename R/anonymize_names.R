@@ -17,19 +17,6 @@
 #' @name string_anonymization_functions
 NULL
 
-# Load required libraries
-if (!require(stringdist)) {
-  install.packages("stringdist")
-}
-library(stringdist)
-if (!require(textclean)) {
-  install.packages("textclean")
-}
-library(textclean)
-if (!require(lexicon)) {
-  install.packages("lexicon")
-}
-library(lexicon)
 
 #' Determine Maximum Allowed Typos Based on Word Length
 #'

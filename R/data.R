@@ -23,9 +23,6 @@
 "contraction_replacements"
 
 
-
-
-
 #' Abbreviation Corrections Data Frame
 #'
 #' A data frame containing corrections for abbreviations.
@@ -51,7 +48,6 @@
 
 
 
-
 #' Whitelist of Terms
 #'
 #' A character vector containing terms that are whitelisted for use in text data processing.
@@ -72,7 +68,6 @@
 #' anonymizing_whitelist[1:10]
 #' @source Generated for example purposes
 "anonymizing_whitelist"
-
 
 
 
@@ -110,8 +105,6 @@
 
 
 
-
-
 #' Common names Dataset
 #'
 #' A comprehensive list of common names used in English-speaking countries.
@@ -140,8 +133,6 @@
 #' @source
 #' The `person_names` dataset is a synthetic compilation of common names and does not reference any specific source.
 #' It is intended for illustrative and testing purposes only.
-
-
 "person_names"
 
 
@@ -183,6 +174,7 @@
 #' The `additional_to_sanitize` dataset is a synthetic compilation of names identified for sanitization and does not reference any specific source.
 #' It is intended for illustrative and data cleaning purposes only.
 "additional_to_sanitize"
+
 
 
 
