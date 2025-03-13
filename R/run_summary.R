@@ -19,6 +19,8 @@ run_summary <- function(data, group_vars, summarization_var) {
     summarise(
       missing_count = sum(is.na(.data[[summarization_var]])),
       n = sum(!is.na(.data[[summarization_var]])),  # Count non-missing observations
+      group_size = (missing_count + n),
+      
       prop_present = n/(missing_count + n),
     
       mean = ifelse(n > 0, mean(.data[[summarization_var]], na.rm = TRUE), NA_real_),
