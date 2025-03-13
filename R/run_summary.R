@@ -19,7 +19,7 @@ run_summary <- function(data, group_vars, summarization_var) {
     summarise(
       missing_count = sum(is.na(.data[[summarization_var]])),
       n = sum(!is.na(.data[[summarization_var]])),  # Count non-missing observations
-      prop_present = sum(!is.na(!!summarization_sym)) / n,
+      prop_present = sum(!is.na(.data[[summarization_var]])) / n,
     
       mean = ifelse(n > 0, mean(.data[[summarization_var]], na.rm = TRUE), NA_real_),
       std_dev = ifelse(n > 1, sd(.data[[summarization_var]], na.rm = TRUE), NA_real_),
