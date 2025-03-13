@@ -12,30 +12,40 @@
 
 
 # This function generates a summary table with various statistics for the specified grouping variables and dependent variable.
+
 run_summary <- function(data, group_vars, summarization_var) {
   data %>%
-    group_by(!!!syms(group_vars)) %>%
-    dplyr::summarise(
-      missing_count = sum(is.na(!!sym(summarization_var))),
-      n = n(),                         # Count the number of observations
-      mean = mean(!!sym(summarization_var)),             # Calculate the mean of the dependent variable
-      std_dev = sd(!!sym(summarization_var)),           # Calculate the standard deviation
-      se = sd(!!sym(summarization_var)) / base::sqrt(n()), # Calculate the standard error
-      loci = mean(!!sym(summarization_var)) - 1.96 * .data$se, # Calculate the lower confidence interval
-      upci = mean(!!sym(summarization_var)) + 1.96 * .data$se,  # Calculate the upper confidence interval
-      min = min(!!sym(summarization_var)),               # Calculate the minimum
-      max = max(!!sym(summarization_var)),               # Calculate the maximum
-      y16 = quantile(!!sym(summarization_var), 0.16),
-      y25 = quantile(!!sym(summarization_var), 0.25),    # Calculate the 25th percentile
-      y50 = median(!!sym(summarization_var)),           # Calculate the median (50th percentile)
-      y75 = quantile(!!sym(summarization_var), 0.75),    # Calculate the 75th percentile
-      y84 = quantile(!!sym(summarization_var), .84),    # Calculate the 75th percentile
-      coef_var = sd(!!sym(summarization_var)) / mean(!!sym(summarization_var)),  # Calculate the coefficient of variation
-      skewness = moments::skewness(!!sym(summarization_var)),  # Calculate skewness
-      kurtosis = moments::kurtosis(!!sym(summarization_var))  # Calculate kurtosis
+    group_by(across(all_of(group_vars))) %>%
+    summarise(
+      missing_count = sum(is.na(.data[[summarization_var]])),
+      n = sum(!is.na(.data[[summarization_var]])),  # Count non-missing observations
+      prop_present = sum(!is.na(!!summarization_sym)) / n,
+    
+      mean = ifelse(n > 0, mean(.data[[summarization_var]], na.rm = TRUE), NA_real_),
+      std_dev = ifelse(n > 1, sd(.data[[summarization_var]], na.rm = TRUE), NA_real_),
+      se = ifelse(n > 1, std_dev / sqrt(n), NA_real_),
+      
+      loci = ifelse(n > 1, mean - 1.96 * se, NA_real_),
+      upci = ifelse(n > 1, mean + 1.96 * se, NA_real_),
+      
+      min = ifelse(n > 0, min(.data[[summarization_var]], na.rm = TRUE), NA_real_),
+      max = ifelse(n > 0, max(.data[[summarization_var]], na.rm = TRUE), NA_real_),
+      
+      y16 = ifelse(n > 0, quantile(.data[[summarization_var]], 0.16, na.rm = TRUE), NA_real_),
+      y25 = ifelse(n > 0, quantile(.data[[summarization_var]], 0.25, na.rm = TRUE), NA_real_),
+      y50 = ifelse(n > 0, median(.data[[summarization_var]], na.rm = TRUE), NA_real_),
+      y75 = ifelse(n > 0, quantile(.data[[summarization_var]], 0.75, na.rm = TRUE), NA_real_),
+      y84 = ifelse(n > 0, quantile(.data[[summarization_var]], 0.84, na.rm = TRUE), NA_real_),
+      
+      coef_var = ifelse(n > 1 & mean != 0, std_dev / mean, NA_real_),  # Avoid division by zero
+      
+      skewness = ifelse(n > 2, moments::skewness(.data[[summarization_var]], na.rm = TRUE), NA_real_),
+      kurtosis = ifelse(n > 3, moments::kurtosis(.data[[summarization_var]], na.rm = TRUE), NA_real_)
     )
-  
 }
+
+
+
 
 # run_summary(df, c("sex", "species"), "flipper_length_mm")
 
