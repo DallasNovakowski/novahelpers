@@ -111,7 +111,7 @@ theme_basic <- function() {
       axis.title.y = ggplot2::element_text(margin = ggplot2::unit(c(0, 3, 0, 0), "mm")),
       legend.title = ggplot2::element_text(face = "bold"),
       plot.subtitle = ggtext::element_markdown(),
-      panel.grid.major.y = element_line(
+      panel.grid.major.y = ggplot2::element_line(
         color = "grey80",
         size = 0.5
         )

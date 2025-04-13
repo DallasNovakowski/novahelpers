@@ -163,7 +163,7 @@ create_shadeplot <- function(raw_data, summary_data, y_var, x_var,
       strip.text = ggplot2::element_text(size = ggplot2::rel(axis_text_rel))
     ) +
     ggplot2::scale_fill_manual(values = base_palette, labels = function(x) stringr::str_wrap(x, width = 5)) +
-    ggplot2::scale_fill_continuous(from = "white", to = "black", aesthetics = "fill") +
+    # ggplot2::scale_fill_continuous(from = "white", to = "black", aesthetics = "fill") +
     ggplot2::scale_color_manual(values = contrast_palette) +
     ggplot2::guides(fill = "none")  # Hide redundant legend
   
