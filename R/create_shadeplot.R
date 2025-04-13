@@ -189,10 +189,25 @@ create_shadeplot <- function(raw_data, summary_data, y_var, x_var,
   # ---- DOT PLOTS (Optional) ----
   
   if (dots) {
-    p <- p + ggdist::stat_dots(
-      alpha = 0.35, side = direction, scale = scaling, binwidth = 1, dotsize = dotsize,
-      position = ggplot2::position_dodge(width = stagger), show.legend = FALSE
-    )
+    
+    if (!is.null(fill_var)) {
+      p <- p + ggdist::stat_dots(        ggplot2::aes(fill = .data[[fill_var]]),
+        alpha = 0.35, side = direction, scale = scaling, binwidth = 1, dotsize = dotsize,
+        position = ggplot2::position_dodge(width = stagger), show.legend = FALSE
+      )
+    } else {
+      p <- p + ggdist::stat_dots(alpha = 0.35, side = direction, scale = scaling, 
+                                 binwidth = 1, dotsize = dotsize,
+                                 position = ggplot2::position_dodge(width = stagger), 
+                                 show.legend = FALSE
+      )
+    }
+    
+    
+    
+    
+    
+    
   }
   
   # ---- MEAN + CONFIDENCE INTERVAL POINTS ----
@@ -260,7 +275,13 @@ create_shadeplot <- function(raw_data, summary_data, y_var, x_var,
         breaks = scales::pretty_breaks(n = 3)
       ) +
       ggplot2::coord_flip() +
-      ggplot2::theme(panel.grid.major.y = ggplot2::element_blank())
+      ggplot2::theme(panel.grid.major.y = ggplot2::element_blank(),
+                       panel.grid.major.y = ggplot2::element_line(
+                         color = "grey80",
+                         size = 0.5
+                       )
+                       
+                       )
   }
   
   # ---- CUSTOM AXIS + FILL LABELS ----
