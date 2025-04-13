@@ -18,13 +18,40 @@
 
 
 
-#' Nova color palette
+#' Socia color palette
 #'
-#' A character vector of hex color codes used as the Nova default palette.
+#' A character vector of hex color codes used as the Socia default palette.
 #'
 #' @export
-nova_palette <- c( "#78AAA9", "#FFDB6E", "#604D75", "#A03030",
+socia_palette <- c( "#78AAA9", "#FFDB6E", "#604D75", "#A03030",
                    "#3B8EAD", "#8E4921", "#CC79A7", "#B3D7E5")
+
+
+
+
+#' CNC color palette
+#'
+#' A character vector of hex color codes used as the cnc default palette.
+#'
+#' @export
+cnc_palette <- c(
+  "#EA1525", # Red - KEEP
+  "#547B81", # Dark Teal - KEEP
+  "#20B2AA", # Light Sea Green - KEEP
+  "#F2A900", # Golden Yellow - KEEP
+  "#B07AA1", # Muted Purple
+  "#94C973", # Soft Green
+  "#E17C05", # Orange-Brown
+  "#7F3C8D", # Dark Plum
+  "#999999", # Neutral Gray
+  "#D1BCA3", # Sand
+  "#1170AA", # Rich Blue
+  "#DD8452", # Warm Tan
+  "#8C564B", # Brown
+  "#84B1ED", # Light Periwinkle
+  "#4C4C4C" # Charcoal
+)
+
 
 
 

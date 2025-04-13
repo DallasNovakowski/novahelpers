@@ -280,6 +280,30 @@ create_shadeplot <- function(raw_data, summary_data, y_var, x_var,
 
 
 
+#' @export
+adjust_flipped_layout <- function(flipped, mean_nudge_x, mean_nudge_y, stagger) {
+  if (flipped) {
+    list(
+      mean_nudge_x = -mean_nudge_x,
+      mean_nudge_y = -mean_nudge_y,
+      direction = "right",
+      hbump = -0.1,
+      vbump = 0,
+      stagger = stagger,
+      contraction = c(0, 0)
+    )
+  } else {
+    list(
+      mean_nudge_x = mean_nudge_x,
+      mean_nudge_y = mean_nudge_y,
+      direction = "left",
+      hbump = 0.5,
+      vbump = 0,
+      stagger = stagger * 1.5,
+      contraction = c(0, 0)
+    )
+  }
+}
 
 
 
