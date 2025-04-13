@@ -331,7 +331,7 @@ adjust_flipped_layout <- function(flipped, mean_nudge_x, mean_nudge_y, stagger) 
 # # Generate plots for different levels of grouping
 # create_shadeplot(df, flipper_summaries[["species"]], y_var = "flipper_length_mm", "species")
 # create_shadeplot(df, flipper_summaries[["species_sex"]], y_var = "flipper_length_mm", "species", "sex")
-# create_shadeplot(df, flipper_summaries[["species_sex_island"]], 
-#              y_var = "flipper_length_mm", "species", "sex", "island", 
+# create_shadeplot(df, flipper_summaries[["species_sex_island"]],
+#              y_var = "flipper_length_mm", "species", "sex", "island",
 #              flipped = TRUE, scaling = .6, dots = TRUE, dotsize = .6)
 

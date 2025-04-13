@@ -30,7 +30,7 @@ run_summary <- function(data, group_vars, summarization_var, na.rm = TRUE, na_va
     dplyr::group_by(dplyr::across(dplyr::all_of(group_vars))) %>%
     dplyr::summarise(
       missing_count = sum(!.valid),
-      n_present     = sum(.valid),
+      n     = sum(.valid),
       group_size    = dplyr::n(),
       prop_present  = n_present / group_size,
       
