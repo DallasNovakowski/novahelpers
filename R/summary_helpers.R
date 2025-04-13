@@ -32,26 +32,26 @@ run_summary <- function(data, group_vars, summarization_var, na.rm = TRUE, na_va
       missing_count = sum(!.valid),
       n     = sum(.valid),
       group_size    = dplyr::n(),
-      prop_present  = n_present / group_size,
+      prop_present  = n / group_size,
       
-      mean    = if (n_present > 0) mean(.value[.valid], na.rm = na.rm) else NA_real_,
-      std_dev = if (n_present > 1) sd(.value[.valid], na.rm = na.rm) else NA_real_,
-      se      = if (n_present > 1) std_dev / sqrt(n_present) else NA_real_,
-      loci    = if (n_present > 1) mean - 1.96 * se else NA_real_,
-      upci    = if (n_present > 1) mean + 1.96 * se else NA_real_,
+      mean    = if (n > 0) mean(.value[.valid], na.rm = na.rm) else NA_real_,
+      std_dev = if (n > 1) sd(.value[.valid], na.rm = na.rm) else NA_real_,
+      se      = if (n > 1) std_dev / sqrt(n) else NA_real_,
+      loci    = if (n > 1) mean - 1.96 * se else NA_real_,
+      upci    = if (n > 1) mean + 1.96 * se else NA_real_,
       
-      min = if (n_present > 0) min(.value[.valid], na.rm = na.rm) else NA_real_,
-      max = if (n_present > 0) max(.value[.valid], na.rm = na.rm) else NA_real_,
+      min = if (n > 0) min(.value[.valid], na.rm = na.rm) else NA_real_,
+      max = if (n > 0) max(.value[.valid], na.rm = na.rm) else NA_real_,
       
-      y16 = if (n_present > 0) quantile(.value[.valid], 0.16, na.rm = na.rm) else NA_real_,
-      y25 = if (n_present > 0) quantile(.value[.valid], 0.25, na.rm = na.rm) else NA_real_,
-      y50 = if (n_present > 0) median(.value[.valid], na.rm = na.rm) else NA_real_,
-      y75 = if (n_present > 0) quantile(.value[.valid], 0.75, na.rm = na.rm) else NA_real_,
-      y84 = if (n_present > 0) quantile(.value[.valid], 0.84, na.rm = na.rm) else NA_real_,
+      y16 = if (n > 0) quantile(.value[.valid], 0.16, na.rm = na.rm) else NA_real_,
+      y25 = if (n > 0) quantile(.value[.valid], 0.25, na.rm = na.rm) else NA_real_,
+      y50 = if (n > 0) median(.value[.valid], na.rm = na.rm) else NA_real_,
+      y75 = if (n > 0) quantile(.value[.valid], 0.75, na.rm = na.rm) else NA_real_,
+      y84 = if (n > 0) quantile(.value[.valid], 0.84, na.rm = na.rm) else NA_real_,
       
-      coef_var = if (n_present > 1 && mean != 0) std_dev / mean else NA_real_,
-      skewness = if (n_present > 2) moments::skewness(.value[.valid], na.rm = na.rm) else NA_real_,
-      kurtosis = if (n_present > 3) moments::kurtosis(.value[.valid], na.rm = na.rm) else NA_real_,
+      coef_var = if (n > 1 && mean != 0) std_dev / mean else NA_real_,
+      skewness = if (n > 2) moments::skewness(.value[.valid], na.rm = na.rm) else NA_real_,
+      kurtosis = if (n > 3) moments::kurtosis(.value[.valid], na.rm = na.rm) else NA_real_,
       .groups = "drop"
     )
 }
@@ -84,7 +84,7 @@ run_grouped_summaries <- function(data, summarization_var, group_var_list) {
     
     summary %>%
       dplyr::mutate(grouping_vars = group_name) %>%
-      dplyr::filter(n_present > 0)
+      dplyr::filter(n > 0)
   })
   
   names(summary_dataframes) <- sapply(group_combinations, paste, collapse = "_")
