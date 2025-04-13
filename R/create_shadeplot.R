@@ -276,7 +276,7 @@ create_shadeplot <- function(raw_data, summary_data, y_var, x_var,
       ) +
       ggplot2::coord_flip() +
       ggplot2::theme(panel.grid.major.y = ggplot2::element_blank(),
-                       panel.grid.major.y = ggplot2::element_line(
+                       panel.grid.major.x = ggplot2::element_line(
                          color = "grey80",
                          size = 0.5
                        )
