@@ -40,7 +40,6 @@
 #' @import cowplot
 #' @import stringr
 #' @importFrom grid unit
-#' @importFrom novahelpers theme_basic
 #'
 #' @examples
 #' \dontrun{
@@ -152,7 +151,7 @@ create_shadeplot <- function(raw_data, summary_data, y_var, x_var,
   
   p <- ggplot2::ggplot(raw_data, ggplot2::aes(x = .data[[x_var]], y = .data[[y_var]])) +
     ggplot2::theme_bw(base_size = base_size) +
-    novahelpers::theme_basic() +
+    theme_basic() +
     ggplot2::theme(
       legend.position = "top",
       legend.justification = "center",
