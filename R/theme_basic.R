@@ -102,7 +102,7 @@ cnc_palette <- c(
 
 
 
-
+#' @export
 theme_basic <- function() {
   cowplot::theme_half_open() +
     ggplot2::theme(

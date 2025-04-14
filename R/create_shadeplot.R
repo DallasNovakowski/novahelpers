@@ -39,7 +39,9 @@
 #' @import scales
 #' @import cowplot
 #' @import stringr
+#' @import ggpp	
 #' @importFrom grid unit
+#' 
 #'
 #' @examples
 #' \dontrun{
@@ -165,8 +167,15 @@ create_shadeplot <- function(raw_data, summary_data, y_var, x_var,
     ggplot2::scale_fill_manual(values = base_palette, labels = function(x) stringr::str_wrap(x, width = 5)) +
     # ggplot2::scale_fill_continuous(from = "white", to = "black", aesthetics = "fill") +
     ggplot2::scale_color_manual(values = contrast_palette) +
-    ggplot2::guides(fill = "none")  # Hide redundant legend
-  
+    ggplot2::guides(fill = "none") +   # Hide redundant legend
+    ggplot2::scale_y_continuous(
+      limits = c(y_min, y_max),
+      expand = ggplot2::expansion(mult = c(0, 0)),
+      oob = scales::rescale_none,
+      breaks = scales::pretty_breaks(n = 3)
+    )
+    
+    
   # ---- VIOLIN (SLAB) DISTRIBUTIONS ----
   
   if (!is.null(fill_var)) {
@@ -217,7 +226,7 @@ create_shadeplot <- function(raw_data, summary_data, y_var, x_var,
     ggplot2::aes(x = .data[[x_var]], y = mean, ymin = loci, ymax = upci),
     inherit.aes = FALSE,
     show.legend = FALSE,
-    position = ggplot2::position_dodge2(width = stagger),
+    position = ggpp::position_dodge2nudge(width = stagger),
     color = "grey30"
   )
   
@@ -246,14 +255,14 @@ create_shadeplot <- function(raw_data, summary_data, y_var, x_var,
       ),
       inherit.aes = FALSE,
       size = label_text_size, show.legend = FALSE,
-      position = ggplot2::position_dodge2(width = stagger)
+      position = ggpp::position_dodge2nudge(x = mean_nudge_x, y = mean_nudge_y, width = stagger)
     )
   } else {
     p <- p + ggplot2::geom_text(
       data = summary_data,
       ggplot2::aes(x = .data[[x_var]], y = mean, label = round(mean, 1)),
       color = "grey30", inherit.aes = FALSE, size = label_text_size,
-      position = ggplot2::position_dodge2(width = stagger)
+      position = ggpp::position_dodge2nudge(x = mean_nudge_x, y = mean_nudge_y, width = stagger)
     )
   }
   
@@ -266,14 +275,10 @@ create_shadeplot <- function(raw_data, summary_data, y_var, x_var,
   
   # ---- FINAL COORDINATE + AXIS TWEAKS ----
   
+  
+  
   if (flipped) {
-    p <- p +
-      ggplot2::scale_y_continuous(
-        limits = c(y_min, y_max),
-        expand = ggplot2::expansion(mult = c(0, 0)),
-        oob = scales::rescale_none,
-        breaks = scales::pretty_breaks(n = 3)
-      ) +
+    p <- p  +
       ggplot2::coord_flip() +
       ggplot2::theme(panel.grid.major.y = ggplot2::element_blank(),
                        panel.grid.major.x = ggplot2::element_line(
@@ -355,4 +360,8 @@ adjust_flipped_layout <- function(flipped, mean_nudge_x, mean_nudge_y, stagger) 
 # create_shadeplot(df, flipper_summaries[["species_sex_island"]],
 #              y_var = "flipper_length_mm", "species", "sex", "island",
 #              flipped = TRUE, scaling = .6, dots = TRUE, dotsize = .6)
+# 
+# create_shadeplot(df, flipper_summaries[["species_sex_island"]],
+#              y_var = "flipper_length_mm", "species", "sex", "island",
+#              flipped = FALSE, scaling = .6, dots = TRUE, dotsize = .6)
 
